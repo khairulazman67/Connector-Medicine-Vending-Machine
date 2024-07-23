@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionHistoryStatus {
+  TAMBAH
+  KURANG
+  SO
+}
+
+model VendingMachine {
+  id Int                        @id @default(autoincrement())
+  name String                   
+  isPaperlessHospital  Boolean  @default(true) @map("is_paperless_hospital")
+  VmEtalase  VmEtalase[]      
+  vendingMachine  VmTransactionHistory[]
+  VmSetLocation  VmSetLocation[]
+}
+
+model VmEtalase{
+  id Int                          @id @default(autoincrement())
+  idVm  Int                       @map("id_vm")
+  displayCode String              @map("display_code")    
+  itemCode String                 @map("item_code")      
+  medicineName String             @map("medicine_name")   
+  maxStock Int                    @map("max_stock")       
+  stock Int                       @map("stock")     
+  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
+} 
+
+model VmTransactionHistory{
+  id    Int                       @id @default(autoincrement())
+  idVm  Int                       @map("id_vm")
+  displayId Int                   @map("display_id")
+  medicineCode String             @map("medicine_code")
+  locationCode String             @map("location_code") //location of medicine release 
+  firstStock Int                  @map("first_stock")
+  lastStock Int                   @map("last_stock")
+  note String                     @map("note")
+  status TransactionHistoryStatus @map("status")
+  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
+} 
+
+model VmSetLocation{
+  id    Int                       @id @default(autoincrement())
+  idVm  Int                       @map("id_vm") 
+  locationCode String             @map("location_code") 
+  
+  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
+} 
