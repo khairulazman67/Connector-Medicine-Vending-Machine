@@ -1,4 +1,4 @@
-import { PrismaClient, VendingMachine } from "@prisma/client";
+import { PrismaClient, VendingMachine, Prisma } from "@prisma/client";
 import { injectable } from "tsyringe";
 import { prisma } from "../db";
 
@@ -9,17 +9,19 @@ export class VendingMachineRepository {
   }
 
   async getById(id: number): Promise<VendingMachine | null> {
-    return prisma.vendingMachine.findUnique({ where: { id } });
+    const getDataById = await prisma.vendingMachine.findUnique({
+      where: { id },
+    });
+    if (!getDataById)
+      throw new Error(`Vending machine with id ${id} not found`);
+    return getDataById;
   }
 
-  async create(dataSave: any): Promise<VendingMachine> {
-    const finalSave = {
-      name: dataSave.name,
-      isPaperlessHospital: dataSave.is_paperless_hospital,
-    };
-
+  async create(
+    data: Prisma.VendingMachineCreateInput
+  ): Promise<VendingMachine> {
     return prisma.vendingMachine.create({
-      data: finalSave,
+      data,
     });
   }
 

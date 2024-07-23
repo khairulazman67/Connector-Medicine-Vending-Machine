@@ -17,6 +17,7 @@ container.registerSingleton(VendingMachineService);
 
 // Routes
 app.use("/v1/vm", VendingMachineRoutes);
+app.use("/v1/vm-etalase", VendingMachineRoutes);
 
 // Error handling middleware
 app.use(globalErrorHandler);

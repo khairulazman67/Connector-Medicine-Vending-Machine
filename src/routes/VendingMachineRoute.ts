@@ -1,8 +1,6 @@
 import { Router } from "express";
 import { container } from "tsyringe";
 import { VendingMachineController } from "../controllers/VendingMachineController";
-import express, { Request, Response, NextFunction } from "express";
-import { z, AnyZodObject } from "zod";
 import validate from "../middleware/payloadValidation";
 import { vendingMachineSchema } from "../utils/validations/vendingMachineRequest";
 
@@ -12,7 +10,6 @@ const vendingMachineController = container.resolve(VendingMachineController);
 router.get("/", vendingMachineController.getAll.bind(vendingMachineController));
 router.get(
   "/:id",
-
   vendingMachineController.getById.bind(vendingMachineController)
 );
 router.post(
@@ -22,6 +19,7 @@ router.post(
 );
 router.put(
   "/:id",
+  validate(vendingMachineSchema),
   vendingMachineController.update.bind(vendingMachineController)
 );
 router.delete(

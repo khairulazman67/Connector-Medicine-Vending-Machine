@@ -3,12 +3,12 @@ import type { ZodError } from "zod";
 import { formatZodError } from "./validationResponse";
 
 export class FormatterResponse {
-  static success<T>(data: T, message: string = "Operation successful") {
+  static success<T>(data?: T, message: string = "Operation successful") {
     return {
       status: "success",
       code: 200,
       message,
-      data,
+      ...(data && { data }),
     };
   }
 

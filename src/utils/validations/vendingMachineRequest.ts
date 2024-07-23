@@ -7,9 +7,9 @@ export const vendingMachineSchema = z.object({
       invalid_type_error: "Name harus berupa string",
     })
     .min(1),
-  is_paperless_hospital: z
+  isPaperlessHospital: z
     .boolean({
-      invalid_type_error: "is_paperless_hospital harus boolean",
+      invalid_type_error: "isPaperlessHospital harus boolean",
     })
     .default(true),
 });

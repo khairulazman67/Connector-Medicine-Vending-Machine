@@ -31,6 +31,7 @@ export class VendingMachineController {
       const machine = await this.vendingMachineService?.getVendingMachineById(
         parseInt(id)
       );
+
       res.json(
         FormatterResponse.success(
           machine,
@@ -61,10 +62,11 @@ export class VendingMachineController {
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const data = req.body;
+      await this.vendingMachineService?.getVendingMachineById(parseInt(id));
+
       const machine = await this.vendingMachineService?.updateVendingMachine(
         parseInt(id),
-        data
+        req.body
       );
       res.json(
         FormatterResponse.success(
@@ -84,7 +86,7 @@ export class VendingMachineController {
         parseInt(id)
       );
       res.json(
-        FormatterResponse.success("Data vending machine berhasil dihapus")
+        FormatterResponse.success(null, "Data vending machine berhasil dihapus")
       );
     } catch (error) {
       next(error);
