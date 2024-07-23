@@ -5,6 +5,8 @@ import VendingMachineRoutes from "./routes/VendingMachineRoute";
 import { globalErrorHandler } from "./middleware/errorHandler";
 import { VendingMachineService } from "./services/VendingMachineService";
 import { VendingMachineRepository } from "./repositories/VendingMachineRepository";
+import { VMEtalaseRepository } from "./repositories/VMEtalaseRepository";
+import { VMEtalaseService } from "./services/VMEtalaseService";
 const app = express();
 const port = process.env.PORT;
 
@@ -14,6 +16,9 @@ app.use(express.json());
 // Register services and repositories
 container.registerSingleton(VendingMachineRepository);
 container.registerSingleton(VendingMachineService);
+
+container.registerSingleton(VMEtalaseRepository);
+container.registerSingleton(VMEtalaseService);
 
 // Routes
 app.use("/v1/vm", VendingMachineRoutes);
