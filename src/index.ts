@@ -5,7 +5,6 @@ import VendingMachineRoutes from "./routes/VendingMachineRoute";
 import { globalErrorHandler } from "./middleware/errorHandler";
 import { VendingMachineService } from "./services/VendingMachineService";
 import { VendingMachineRepository } from "./repositories/VendingMachineRepository";
-import { ZodError } from "zod";
 const app = express();
 const port = process.env.PORT;
 

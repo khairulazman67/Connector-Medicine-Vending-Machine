@@ -1,17 +1,15 @@
 import { PrismaClient, VendingMachine } from "@prisma/client";
 import { injectable } from "tsyringe";
-import { VendingMachinePayload } from "../utils/validations/vendingMachineRequest";
+import { prisma } from "../db";
 
 @injectable()
 export class VendingMachineRepository {
-  private prisma = new PrismaClient();
-
   async getAll(): Promise<VendingMachine[]> {
-    return this.prisma.vendingMachine.findMany();
+    return prisma.vendingMachine.findMany();
   }
 
   async getById(id: number): Promise<VendingMachine | null> {
-    return this.prisma.vendingMachine.findUnique({ where: { id } });
+    return prisma.vendingMachine.findUnique({ where: { id } });
   }
 
   async create(dataSave: any): Promise<VendingMachine> {
@@ -20,7 +18,7 @@ export class VendingMachineRepository {
       isPaperlessHospital: dataSave.is_paperless_hospital,
     };
 
-    return this.prisma.vendingMachine.create({
+    return prisma.vendingMachine.create({
       data: finalSave,
     });
   }
@@ -29,10 +27,10 @@ export class VendingMachineRepository {
     id: number,
     data: Partial<VendingMachine>
   ): Promise<VendingMachine> {
-    return this.prisma.vendingMachine.update({ where: { id }, data });
+    return prisma.vendingMachine.update({ where: { id }, data });
   }
 
   async delete(id: number): Promise<VendingMachine> {
-    return this.prisma.vendingMachine.delete({ where: { id } });
+    return prisma.vendingMachine.delete({ where: { id } });
   }
 }

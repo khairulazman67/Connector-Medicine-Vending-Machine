@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { z, ZodError } from "zod";
+import { z } from "zod";
 import { FormatterResponse } from "../utils/response/formatterResponse";
 
 // Middleware untuk validasi

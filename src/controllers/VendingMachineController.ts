@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { autoInjectable, inject } from "tsyringe";
 import { VendingMachineService } from "../services/VendingMachineService";
 import { FormatterResponse } from "../utils/response/formatterResponse";
-import { vendingMachineSchema } from "../utils/validations/vendingMachineRequest";
 
 @autoInjectable()
 export class VendingMachineController {
