@@ -30,11 +30,9 @@ export const vmEtalaseCreateSchema = z.object({
 });
 
 export const vmEtalaseUpdateSchema = z.object({
-  idVm: z
-    .number({
-      invalid_type_error: "idVm harus berupa number",
-    })
-    .min(1),
+  idVm: z.number({
+    invalid_type_error: "idVm harus berupa number",
+  }),
   displayCode: z.string({
     invalid_type_error: "displayCode harus berupa string",
   }),

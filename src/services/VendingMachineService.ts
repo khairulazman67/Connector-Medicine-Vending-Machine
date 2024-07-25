@@ -24,6 +24,7 @@ export class VendingMachineService {
   }
 
   async updateVendingMachine(id: number, data: Partial<VendingMachine>) {
+    await this.getVendingMachineById(id);
     return this.vendingMachineRepository.update(id, data);
   }
 

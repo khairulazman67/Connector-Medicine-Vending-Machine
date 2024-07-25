@@ -62,8 +62,6 @@ export class VendingMachineController {
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      await this.vendingMachineService?.getVendingMachineById(parseInt(id));
-
       const machine = await this.vendingMachineService?.updateVendingMachine(
         parseInt(id),
         req.body
@@ -82,9 +80,7 @@ export class VendingMachineController {
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const machine = await this.vendingMachineService?.deleteVendingMachine(
-        parseInt(id)
-      );
+      await this.vendingMachineService?.deleteVendingMachine(parseInt(id));
       res.json(
         FormatterResponse.success(null, "Data vending machine berhasil dihapus")
       );

@@ -8,12 +8,28 @@ import { VendingMachineRepository } from "../repositories/VendingMachineReposito
 export class VMEtalaseService {
   constructor(
     @inject(VMEtalaseRepository)
-    private vmEtalaseRepository: VMEtalaseRepository,
-    private vendingMachineRepository: VendingMachineRepository
+    private vmEtalaseRepository: VMEtalaseRepository
   ) {}
 
   // async createVMEtalase(data: VMEtalaseCreatePayload) {
   async createVMEtalase(data: VMEtalaseCreatePayload) {
     return this.vmEtalaseRepository.create(data);
+  }
+
+  async getAllVMEtalase() {
+    return this.vmEtalaseRepository.getAll();
+  }
+
+  async updateVMEtalase(id: number, data: Partial<VmEtalase>) {
+    await this.getVMEtalaseById(id);
+    return this.vmEtalaseRepository.update(id, data);
+  }
+
+  async getVMEtalaseById(id: number) {
+    return this.vmEtalaseRepository.getById(id);
+  }
+
+  async deleteVMEtalase(id: number) {
+    return this.vmEtalaseRepository.delete(id);
   }
 }
