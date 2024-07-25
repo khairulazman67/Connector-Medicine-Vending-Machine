@@ -19,10 +19,19 @@ enum TransactionHistoryStatus {
   SO
 }
 
+model Fasyankes{
+  id                  Int         @id @default(autoincrement())
+  fasyankesCode       String      @map("fasyankes_code")         @db.VarChar(10)
+  name                String      @map("name")                   @db.VarChar(100)
+  VendingMachine       VendingMachine[]
+}
+
 model VendingMachine {
   id Int                        @id @default(autoincrement())
   name String                   
+  idFasyankes Int                 @map("fasyankes_id")            @unique
   isPaperlessHospital  Boolean  @default(true) @map("is_paperless_hospital")
+  fasyankes  Fasyankes  @relation(fields: [idFasyankes], references: [id]) // Relation field
   VmEtalase  VmEtalase[]      
   vendingMachine  VmTransactionHistory[]
   VmSetLocation  VmSetLocation[]
@@ -31,9 +40,9 @@ model VendingMachine {
 model VmEtalase{
   id Int                          @id @default(autoincrement())
   idVm           Int              @map("id_vm")
-  displayCode String              @map("display_code")    
-  itemCode String                 @map("item_code")      
-  medicineName String             @map("medicine_name")   
+  displayCode String              @map("display_code")   @db.VarChar(10)    
+  itemCode String                 @map("item_code")      @db.VarChar(10)
+  medicineName String             @map("medicine_name")  @db.VarChar(100)
   maxStock Int                    @map("max_stock")       
   stock Int                       @map("stock")     
   vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
@@ -43,8 +52,8 @@ model VmTransactionHistory{
   id    Int                       @id @default(autoincrement())
   idVm  Int                       @map("id_vm")
   displayId Int                   @map("display_id")
-  medicineCode String             @map("medicine_code")
-  locationCode String             @map("location_code") //location of medicine release 
+  itemCode String                 @map("itemCode") @db.VarChar(10)
+  locationCode String             @map("location_code") @db.VarChar(10)
   firstStock Int                  @map("first_stock")
   lastStock Int                   @map("last_stock")
   note String                     @map("note")
@@ -52,10 +61,12 @@ model VmTransactionHistory{
   vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
 } 
 
+
 model VmSetLocation{
   id    Int                       @id @default(autoincrement())
   idVm  Int                       @map("id_vm") 
-  locationCode String             @map("location_code") 
-  
+
+  locationCode String             @map("location_code")           @unique
   vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
 } 
+

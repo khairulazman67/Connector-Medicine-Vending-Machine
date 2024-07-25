@@ -19,7 +19,6 @@ export class VendingMachineService {
   }
 
   async createVendingMachine(data: VendingMachinePayload) {
-    // throw new Error("Value must be greater than 0");
     return this.vendingMachineRepository.create(data);
   }
 
