@@ -1,7 +1,8 @@
 import "reflect-metadata";
 import express from "express";
 import { container } from "tsyringe";
-import VendingMachineRoutes from "./routes/VendingMachineRoute";
+import VendingMachineRoute from "./routes/VendingMachineRoute";
+import VMEtalaseRoute from "./routes/VMEtalaseRoute";
 import { globalErrorHandler } from "./middleware/errorHandler";
 import { VendingMachineService } from "./services/VendingMachineService";
 import { VendingMachineRepository } from "./repositories/VendingMachineRepository";
@@ -21,8 +22,8 @@ container.registerSingleton(VMEtalaseRepository);
 container.registerSingleton(VMEtalaseService);
 
 // Routes
-app.use("/v1/vm", VendingMachineRoutes);
-app.use("/v1/vm-etalase", VendingMachineRoutes);
+app.use("/v1/vm", VendingMachineRoute);
+app.use("/v1/vm-etalase", VMEtalaseRoute);
 
 // Error handling middleware
 app.use(globalErrorHandler);

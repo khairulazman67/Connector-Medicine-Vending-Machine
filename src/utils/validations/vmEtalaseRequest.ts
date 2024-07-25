@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const vmEtalaseCreateSchema = z.object({
-  idVm: z.number({
+  idVm: z.coerce.number({
     required_error: "idVm wajib diisi",
     invalid_type_error: "idVm harus berupa number",
   }),

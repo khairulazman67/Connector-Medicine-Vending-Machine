@@ -30,7 +30,7 @@ model VendingMachine {
 
 model VmEtalase{
   id Int                          @id @default(autoincrement())
-  idVm  Int                       @map("id_vm")
+  idVm           Int              @map("id_vm")
   displayCode String              @map("display_code")    
   itemCode String                 @map("item_code")      
   medicineName String             @map("medicine_name")   

@@ -2,15 +2,16 @@ import { Router } from "express";
 import { container } from "tsyringe";
 import { VendingMachineController } from "../controllers/VendingMachineController";
 import validate from "../middleware/payloadValidation";
-import { vendingMachineSchema } from "../utils/validations/vendingMachineRequest";
+import { vmEtalaseCreateSchema } from "../utils/validations/vmEtalaseRequest";
+import { VMEtalaseController } from "../controllers/VMEtalaseController";
 
 const router = Router();
-const vendingMachineController = container.resolve(VendingMachineController);
+const vMEtalaseController = container.resolve(VMEtalaseController);
 
 router.post(
   "/",
-  validate(vendingMachineSchema),
-  vendingMachineController.create.bind(vendingMachineController)
+  validate(vmEtalaseCreateSchema),
+  vMEtalaseController.create.bind(vMEtalaseController)
 );
 
 export default router;
