@@ -5,25 +5,37 @@ import { VMEtalaseRepository } from "../repositories/VMEtalaseRepository";
 import { prisma } from "../db";
 import { VmTransactionHistoryRepository } from "../repositories/VmTransactionHistoryRepository";
 import { Prisma, TransactionHistoryStatus, VmEtalase } from "@prisma/client";
+import axios from "axios";
+import { baseAdapter } from "../utils/adapter/axiosAdapter";
 
 @injectable()
 export class TransactionService {
   constructor(
-    @inject(VendingMachineRepository)
-    private vendingMachineRepository: VendingMachineRepository,
-    private vmEtalaseRepository: VMEtalaseRepository, // private vmEtalaseRepository: VMEtalaseRepository
-    private vmTransactionHistoryRepository: VmTransactionHistoryRepository
+    @inject(VmTransactionHistoryRepository)
+    @inject(VMEtalaseRepository)
+    private vmTransactionHistoryRepository: VmTransactionHistoryRepository,
+    private vmEtalaseRepository: VMEtalaseRepository // private vmEtalaseRepository: VMEtalaseRepository
   ) {}
 
   async processTransactionVM(data: processTransactionPayload) {
+    let payloadVM = "p1" + data.barcode;
+    if (data.headerPrint) {
+      payloadVM =
+        payloadVM +
+        "pd1_" +
+        data.headerPrint.row1 +
+        "pd2_" +
+        data.headerPrint.row2 +
+        "pd2_" +
+        data.headerPrint.row2;
+    }
+
     await prisma.$transaction(async (tx) => {
       for (const item of data.medicine) {
         const dataEtalase = await this.vmEtalaseRepository.getByItemVm(
           data.idVm,
           item.itemCode
         );
-
-        console.log("dataEtalase ", dataEtalase);
 
         if (!dataEtalase) {
           throw new Error(
@@ -56,7 +68,32 @@ export class TransactionService {
         };
 
         await this.vmEtalaseRepository.update(dataEtalase.id, etalaseSave, tx);
+
+        console.log("dataEtalase ", dataEtalase);
+        payloadVM =
+          payloadVM +
+          "pn_" +
+          dataEtalase.displayCode +
+          dataEtalase.medicineName +
+          " " +
+          item.usageRules;
       }
     });
+
+    // Buat instance Axios baru menggunakan base adapter
+    const axiosInstance = axios.create({
+      adapter: baseAdapter,
+    });
+
+    // axiosInstance
+    //   .post("/data", payloadVM)
+    //   .then((response) => {
+    //     console.log("Data:", response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
+
+    console.log("send data ", payloadVM);
   }
 }
