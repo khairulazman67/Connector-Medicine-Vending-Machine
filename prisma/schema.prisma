@@ -14,9 +14,8 @@ datasource db {
 }
 
 enum TransactionHistoryStatus {
-  TAMBAH
-  KURANG
-  SO
+  DEBIT //Penambahan stok
+  KREDIT //Pengurangan stok
 }
 
 model Fasyankes{
@@ -51,7 +50,7 @@ model VmEtalase{
 model VmTransactionHistory{
   id    Int                       @id @default(autoincrement())
   idVm  Int                       @map("id_vm")
-  displayId Int                   @map("display_id")
+  displayCode String              @map("display_code")
   itemCode String                 @map("itemCode") @db.VarChar(10)
   locationCode String             @map("location_code") @db.VarChar(10)
   firstStock Int                  @map("first_stock")

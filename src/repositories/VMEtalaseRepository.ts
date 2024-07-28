@@ -1,12 +1,6 @@
-import {
-  PrismaClient,
-  VmEtalase,
-  Prisma,
-  VendingMachine,
-} from "@prisma/client";
+import { VmEtalase, Prisma, PrismaClient } from "@prisma/client";
 import { injectable } from "tsyringe";
-import { prisma } from "../db";
-import { VendingMachineRepository } from "./VendingMachineRepository";
+import { prisma, TxPrismaClient } from "../db";
 
 @injectable()
 export class VMEtalaseRepository {
@@ -16,8 +10,12 @@ export class VMEtalaseRepository {
     });
   }
 
-  async update(id: number, data: Partial<VmEtalase>): Promise<VmEtalase> {
-    return prisma.vmEtalase.update({ where: { id }, data });
+  async update(
+    id: number,
+    data: Partial<VmEtalase>,
+    tx: TxPrismaClient | PrismaClient = prisma
+  ) {
+    return tx.vmEtalase.update({ where: { id }, data });
   }
 
   async getAll(): Promise<VmEtalase[]> {
@@ -50,5 +48,20 @@ export class VMEtalaseRepository {
     if (!getDataById)
       throw new Error(`Vending machine etalase with id ${id} not found`);
     return getDataById;
+  }
+
+  async getByItemVm(idVm: number, itemCode: string): Promise<VmEtalase | null> {
+    const getDataById = await prisma.vmEtalase.findMany({
+      where: {
+        idVm: idVm,
+        itemCode: itemCode,
+      },
+    });
+
+    if (!getDataById || getDataById.length <= 0)
+      throw new Error(
+        `Etalase vending machine ${idVm} dan kode obat ${itemCode} tidak ditemukan`
+      );
+    return getDataById[0];
   }
 }

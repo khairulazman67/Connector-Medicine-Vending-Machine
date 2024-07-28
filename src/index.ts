@@ -3,6 +3,7 @@ import express from "express";
 import { container } from "tsyringe";
 import VendingMachineRoute from "./routes/VendingMachineRoute";
 import VMEtalaseRoute from "./routes/VMEtalaseRoute";
+import TransactionRoute from "./routes/TransactionRoute";
 import { globalErrorHandler } from "./middleware/errorHandler";
 import { VendingMachineService } from "./services/VendingMachineService";
 import { VendingMachineRepository } from "./repositories/VendingMachineRepository";
@@ -24,6 +25,7 @@ container.registerSingleton(VMEtalaseService);
 // Routes
 app.use("/v1/vm", VendingMachineRoute);
 app.use("/v1/vm-etalase", VMEtalaseRoute);
+app.use("/v1/vm-transaction", TransactionRoute);
 
 // Error handling middleware
 app.use(globalErrorHandler);
