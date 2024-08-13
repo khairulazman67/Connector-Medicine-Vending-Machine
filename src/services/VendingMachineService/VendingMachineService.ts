@@ -2,9 +2,10 @@ import { injectable, inject } from "tsyringe";
 import { VendingMachineRepository } from "../../repositories/VendingMachineRepository/VendingMachineRepository";
 import { VendingMachine } from "@prisma/client";
 import { VendingMachinePayload } from "../../utils/validations/vendingMachineRequest";
+import { IVendingMachineService } from "./IVendingMachineService";
 
 @injectable()
-export class VendingMachineService {
+export class VendingMachineService implements IVendingMachineService {
   constructor(
     @inject(VendingMachineRepository)
     private vendingMachineRepository: VendingMachineRepository

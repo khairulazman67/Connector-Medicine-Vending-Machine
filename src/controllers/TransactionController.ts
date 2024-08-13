@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 import { autoInjectable, inject } from "tsyringe";
 import { FormatterResponse } from "../utils/response/formatterResponse";
-import { TransactionService } from "../services/TransactionService/TransactionService";
+import { ITransactionService } from "../services/TransactionService/ITransactionService";
 
 @autoInjectable()
 export class TransactionController {
   constructor(
-    @inject(TransactionService)
-    private TransactionService: TransactionService
+    @inject("ITransactionService")
+    private transactionService: ITransactionService
   ) {}
 
   async processTransactionVM(req: Request, res: Response, next: NextFunction) {
     try {
-      const response = await this.TransactionService?.processTransactionVM(
+      const response = await this.transactionService?.processTransactionVM(
         req.body
       );
 

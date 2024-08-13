@@ -1,5 +1,4 @@
-import { injectable, inject } from "tsyringe";
-import { VendingMachineRepository } from "../../repositories/VendingMachineRepository/VendingMachineRepository";
+import { injectable } from "tsyringe";
 import { processTransactionPayload } from "../../utils/validations/transactionRequest";
 import { VMEtalaseRepository } from "../../repositories/VMEtalaseRepository/VMEtalaseRepository";
 import { prisma } from "../../db";

@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { autoInjectable, inject } from "tsyringe";
-import { VendingMachineService } from "../services/VendingMachineService/VendingMachineService";
 import { FormatterResponse } from "../utils/response/formatterResponse";
+import { IVendingMachineService } from "../services/VendingMachineService/IVendingMachineService";
 
 @autoInjectable()
 export class VendingMachineController {
   constructor(
-    @inject(VendingMachineService)
-    private vendingMachineService?: VendingMachineService
+    @inject("IVendingMachineService")
+    private vendingMachineService: IVendingMachineService
   ) {}
 
   async getAll(req: Request, res: Response, next: NextFunction) {

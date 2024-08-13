@@ -1,8 +1,7 @@
 import { injectable, inject } from "tsyringe";
 import { VMEtalaseRepository } from "../../repositories/VMEtalaseRepository/VMEtalaseRepository";
 import { VMEtalaseCreatePayload } from "../../utils/validations/vmEtalaseRequest";
-import { PrismaClient, VmEtalase, Prisma } from "@prisma/client";
-import { VendingMachineRepository } from "../../repositories/VendingMachineRepository/VendingMachineRepository";
+import { VmEtalase } from "@prisma/client";
 
 @injectable()
 export class VMEtalaseService {
@@ -11,7 +10,6 @@ export class VMEtalaseService {
     private vmEtalaseRepository: VMEtalaseRepository
   ) {}
 
-  // async createVMEtalase(data: VMEtalaseCreatePayload) {
   async createVMEtalase(data: VMEtalaseCreatePayload) {
     return this.vmEtalaseRepository.create(data);
   }
