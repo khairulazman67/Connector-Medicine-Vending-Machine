@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { autoInjectable, inject } from "tsyringe";
 import { FormatterResponse } from "../utils/response/formatterResponse";
-import { TransactionService } from "../services/TransactionService";
+import { TransactionService } from "../services/TransactionService/TransactionService";
 
 @autoInjectable()
 export class TransactionController {
   constructor(
     @inject(TransactionService)
-    private TransactionService?: TransactionService
+    private TransactionService: TransactionService
   ) {}
 
   async processTransactionVM(req: Request, res: Response, next: NextFunction) {

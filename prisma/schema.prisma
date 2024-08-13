@@ -28,8 +28,8 @@ model Fasyankes{
 model VendingMachine {
   id Int                        @id @default(autoincrement())
   name String                   
-  idFasyankes Int                 @map("fasyankes_id")            @unique
-  isPaperlessHospital  Boolean  @default(true) @map("is_paperless_hospital")
+  idFasyankes Int               @map("fasyankes_id")          
+  isPaperlessHospital           Boolean  @default(true) @map("is_paperless_hospital")
   fasyankes  Fasyankes  @relation(fields: [idFasyankes], references: [id]) // Relation field
   VmEtalase  VmEtalase[]      
   vendingMachine  VmTransactionHistory[]

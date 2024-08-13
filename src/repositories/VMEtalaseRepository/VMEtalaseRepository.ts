@@ -1,9 +1,10 @@
 import { VmEtalase, Prisma, PrismaClient } from "@prisma/client";
 import { injectable } from "tsyringe";
-import { prisma, TxPrismaClient } from "../db";
+import { prisma, TxPrismaClient } from "../../db";
+import { IVMEtalaseRepository } from "./IVMEtalaseRepository";
 
 @injectable()
-export class VMEtalaseRepository {
+export class VMEtalaseRepository implements IVMEtalaseRepository {
   async create(data: Prisma.VmEtalaseUncheckedCreateInput): Promise<VmEtalase> {
     return prisma.vmEtalase.create({
       data,

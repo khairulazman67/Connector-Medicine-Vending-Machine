@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { autoInjectable, inject } from "tsyringe";
-import { VMEtalaseService } from "../services/VMEtalaseService";
+import { VMEtalaseService } from "../services/VMEtalaseService/VMEtalaseService";
 import { FormatterResponse } from "../utils/response/formatterResponse";
 
 @autoInjectable()

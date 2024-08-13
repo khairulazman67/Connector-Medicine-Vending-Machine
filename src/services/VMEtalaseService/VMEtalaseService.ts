@@ -1,8 +1,8 @@
 import { injectable, inject } from "tsyringe";
-import { VMEtalaseRepository } from "../repositories/VMEtalaseRepository";
-import { VMEtalaseCreatePayload } from "../utils/validations/vmEtalaseRequest";
+import { VMEtalaseRepository } from "../../repositories/VMEtalaseRepository/VMEtalaseRepository";
+import { VMEtalaseCreatePayload } from "../../utils/validations/vmEtalaseRequest";
 import { PrismaClient, VmEtalase, Prisma } from "@prisma/client";
-import { VendingMachineRepository } from "../repositories/VendingMachineRepository";
+import { VendingMachineRepository } from "../../repositories/VendingMachineRepository/VendingMachineRepository";
 
 @injectable()
 export class VMEtalaseService {

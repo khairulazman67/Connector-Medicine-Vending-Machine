@@ -1,18 +1,19 @@
 import { injectable, inject } from "tsyringe";
-import { VendingMachineRepository } from "../repositories/VendingMachineRepository";
-import { processTransactionPayload } from "../utils/validations/transactionRequest";
-import { VMEtalaseRepository } from "../repositories/VMEtalaseRepository";
-import { prisma } from "../db";
-import { VmTransactionHistoryRepository } from "../repositories/VmTransactionHistoryRepository";
+import { VendingMachineRepository } from "../../repositories/VendingMachineRepository/VendingMachineRepository";
+import { processTransactionPayload } from "../../utils/validations/transactionRequest";
+import { VMEtalaseRepository } from "../../repositories/VMEtalaseRepository/VMEtalaseRepository";
+import { prisma } from "../../db";
+import { VmTransactionHistoryRepository } from "../../repositories/VmTransactionHistoryRepository/VmTransactionHistoryRepository";
 import { Prisma, TransactionHistoryStatus, VmEtalase } from "@prisma/client";
 import axios from "axios";
-import { baseAdapter } from "../utils/adapter/axiosAdapter";
+import { baseAdapter } from "../../utils/adapter/axiosAdapter";
+import { ITransactionService } from "./ITransactionService";
 
 @injectable()
-export class TransactionService {
+export class TransactionService implements ITransactionService {
   constructor(
-    @inject(VmTransactionHistoryRepository)
-    @inject(VMEtalaseRepository)
+    // @inject(VmTransactionHistoryRepository)
+    // @inject(VMEtalaseRepository)
     private vmTransactionHistoryRepository: VmTransactionHistoryRepository,
     private vmEtalaseRepository: VMEtalaseRepository // private vmEtalaseRepository: VMEtalaseRepository
   ) {}

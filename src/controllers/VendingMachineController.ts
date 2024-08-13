@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { autoInjectable, inject } from "tsyringe";
-import { VendingMachineService } from "../services/VendingMachineService";
+import { VendingMachineService } from "../services/VendingMachineService/VendingMachineService";
 import { FormatterResponse } from "../utils/response/formatterResponse";
 
 @autoInjectable()

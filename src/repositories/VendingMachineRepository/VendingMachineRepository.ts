@@ -1,7 +1,7 @@
 import { PrismaClient, VendingMachine, Prisma } from "@prisma/client";
 import { injectable } from "tsyringe";
-import { prisma } from "../db";
-import { VendingMachinePayload } from "../utils/validations/vendingMachineRequest";
+import { prisma } from "../../db";
+import { VendingMachinePayload } from "../../utils/validations/vendingMachineRequest";
 
 @injectable()
 export class VendingMachineRepository {
