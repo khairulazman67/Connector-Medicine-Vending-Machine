@@ -1,7 +1,12 @@
 import { inject, injectable } from "tsyringe";
 import { processTransactionPayload } from "../../utils/validations/transactionRequest";
 import { prisma } from "../../db";
-import { Prisma, TransactionHistoryStatus, Etalase } from "@prisma/client";
+import {
+  Prisma,
+  TransactionHistoryType,
+  Etalase,
+  TransactionHistoryStatus,
+} from "@prisma/client";
 import axios from "axios";
 import { baseAdapter } from "../../utils/adapter/axiosAdapter";
 import { ITransactionService } from "./ITransactionService";
@@ -58,7 +63,8 @@ export class TransactionService implements ITransactionService {
           firstStock: dataEtalase?.stock,
           lastStock: newStock,
           note: `Pengambilan obat pada VM ${data.idVm}`,
-          status: TransactionHistoryStatus.DEBIT,
+          status: TransactionHistoryStatus.TAKING,
+          transactionType: TransactionHistoryType.DEBIT,
         };
 
         await this.TransactionHistoryRepository.create(transactionSave, tx);
