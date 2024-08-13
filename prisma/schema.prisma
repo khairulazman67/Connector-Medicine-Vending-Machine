@@ -31,12 +31,12 @@ model VendingMachine {
   idFasyankes Int               @map("fasyankes_id")          
   isPaperlessHospital           Boolean  @default(true) @map("is_paperless_hospital")
   fasyankes  Fasyankes  @relation(fields: [idFasyankes], references: [id]) // Relation field
-  VmEtalase  VmEtalase[]      
-  vendingMachine  VmTransactionHistory[]
-  VmSetLocation  VmSetLocation[]
+  Etalase  Etalase[]      
+  vendingMachine  TransactionHistory[]
+  SetLocation  SetLocation[]
 }
 
-model VmEtalase{
+model Etalase{
   id Int                          @id @default(autoincrement())
   idVm           Int              @map("id_vm")
   displayCode String              @map("display_code")   @db.VarChar(10)    
@@ -47,7 +47,7 @@ model VmEtalase{
   vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
 } 
 
-model VmTransactionHistory{
+model TransactionHistory{
   id    Int                       @id @default(autoincrement())
   idVm  Int                       @map("id_vm")
   displayCode String              @map("display_code")
@@ -61,7 +61,7 @@ model VmTransactionHistory{
 } 
 
 
-model VmSetLocation{
+model SetLocation{
   id    Int                       @id @default(autoincrement())
   idVm  Int                       @map("id_vm") 
 

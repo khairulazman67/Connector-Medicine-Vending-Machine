@@ -3,12 +3,12 @@ import { TransactionService } from "./services/TransactionService/TransactionSer
 import { ITransactionService } from "./services/TransactionService/ITransactionService";
 import { IVendingMachineService } from "./services/VendingMachineService/IVendingMachineService";
 import { VendingMachineService } from "./services/VendingMachineService/VendingMachineService";
-import { IVMEtalaseService } from "./services/VMEtalaseService/IVMEtalaseService";
-import { VMEtalaseService } from "./services/VMEtalaseService/VMEtalaseService";
-import { IVMEtalaseRepository } from "./repositories/VMEtalaseRepository/IVMEtalaseRepository";
-import { VMEtalaseRepository } from "./repositories/VMEtalaseRepository/VMEtalaseRepository";
-import { IVmTransactionHistoryRepository } from "./repositories/VmTransactionHistoryRepository/IVmTransactionHistoryRepository";
-import { VmTransactionHistoryRepository } from "./repositories/VmTransactionHistoryRepository/VmTransactionHistoryRepository";
+import { IEtalaseService } from "./services/EtalaseService/IEtalaseService";
+import { EtalaseService } from "./services/EtalaseService/EtalaseService";
+import { IEtalaseRepository } from "./repositories/EtalaseRepository/IEtalaseRepository";
+import { EtalaseRepository } from "./repositories/EtalaseRepository/EtalaseRepository";
+import { ITransactionHistoryRepository } from "./repositories/TransactionHistoryRepository/ITransactionHistoryRepository";
+import { TransactionHistoryRepository } from "./repositories/TransactionHistoryRepository/TransactionHistoryRepository";
 import { IVendingMachineRepository } from "./repositories/VendingMachineRepository/IVendingMachineRepository";
 import { VendingMachineRepository } from "./repositories/VendingMachineRepository/VendingMachineRepository";
 
@@ -22,19 +22,16 @@ container.registerSingleton<IVendingMachineService>(
   VendingMachineService
 );
 
-container.registerSingleton<IVMEtalaseService>(
-  "IVMEtalaseService",
-  VMEtalaseService
+container.registerSingleton<IEtalaseService>("IEtalaseService", EtalaseService);
+
+container.registerSingleton<IEtalaseRepository>(
+  "IEtalaseRepository",
+  EtalaseRepository
 );
 
-container.registerSingleton<IVMEtalaseRepository>(
-  "IVMEtalaseRepository",
-  VMEtalaseRepository
-);
-
-container.registerSingleton<IVmTransactionHistoryRepository>(
-  "IVmTransactionHistoryRepository",
-  VmTransactionHistoryRepository
+container.registerSingleton<ITransactionHistoryRepository>(
+  "ITransactionHistoryRepository",
+  TransactionHistoryRepository
 );
 
 container.registerSingleton<IVendingMachineRepository>(

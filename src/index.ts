@@ -2,7 +2,7 @@ import "reflect-metadata";
 import express from "express";
 import "./dependencyInjection";
 import VendingMachineRoute from "./routes/VendingMachineRoute";
-import VMEtalaseRoute from "./routes/VMEtalaseRoute";
+import EtalaseRoute from "./routes/EtalaseRoute";
 import TransactionRoute from "./routes/TransactionRoute";
 import { globalErrorHandler } from "./middleware/errorHandler";
 
@@ -14,8 +14,8 @@ app.use(express.json());
 
 // Routes
 app.use("/v1/vm", VendingMachineRoute);
-app.use("/v1/vm-etalase", VMEtalaseRoute);
-app.use("/v1/vm-transaction", TransactionRoute);
+app.use("/v1/etalase", EtalaseRoute);
+app.use("/v1/transaction", TransactionRoute);
 
 // Error handling middleware
 app.use(globalErrorHandler);

@@ -1,21 +1,21 @@
 import { inject, injectable } from "tsyringe";
 import { processTransactionPayload } from "../../utils/validations/transactionRequest";
 import { prisma } from "../../db";
-import { Prisma, TransactionHistoryStatus, VmEtalase } from "@prisma/client";
+import { Prisma, TransactionHistoryStatus, Etalase } from "@prisma/client";
 import axios from "axios";
 import { baseAdapter } from "../../utils/adapter/axiosAdapter";
 import { ITransactionService } from "./ITransactionService";
-import { IVmTransactionHistoryRepository } from "../../repositories/VmTransactionHistoryRepository/IVmTransactionHistoryRepository";
-import { IVMEtalaseRepository } from "../../repositories/VMEtalaseRepository/IVMEtalaseRepository";
+import { ITransactionHistoryRepository } from "../../repositories/TransactionHistoryRepository/ITransactionHistoryRepository";
+import { IEtalaseRepository } from "../../repositories/EtalaseRepository/IEtalaseRepository";
 
 @injectable()
 export class TransactionService implements ITransactionService {
   constructor(
-    @inject("IVmTransactionHistoryRepository")
-    private vmTransactionHistoryRepository: IVmTransactionHistoryRepository,
+    @inject("ITransactionHistoryRepository")
+    private TransactionHistoryRepository: ITransactionHistoryRepository,
 
-    @inject("IVMEtalaseRepository")
-    private vmEtalaseRepository: IVMEtalaseRepository
+    @inject("IEtalaseRepository")
+    private EtalaseRepository: IEtalaseRepository
   ) {}
 
   async processTransactionVM(data: processTransactionPayload) {
@@ -33,7 +33,7 @@ export class TransactionService implements ITransactionService {
 
     await prisma.$transaction(async (tx) => {
       for (const item of data.medicine) {
-        const dataEtalase = await this.vmEtalaseRepository.getByItemVm(
+        const dataEtalase = await this.EtalaseRepository.getByItemVm(
           data.idVm,
           item.itemCode
         );
@@ -50,25 +50,24 @@ export class TransactionService implements ITransactionService {
             `Stok vending machine ${data.idVm} dan kode obat ${item.itemCode} tidak mencukupi`
           );
 
-        const transactionSave: Prisma.VmTransactionHistoryUncheckedCreateInput =
-          {
-            idVm: data.idVm,
-            displayCode: dataEtalase?.displayCode,
-            itemCode: item.itemCode,
-            locationCode: data.locationCode,
-            firstStock: dataEtalase?.stock,
-            lastStock: newStock,
-            note: `Pengambilan obat pada VM ${data.idVm}`,
-            status: TransactionHistoryStatus.DEBIT,
-          };
+        const transactionSave: Prisma.TransactionHistoryUncheckedCreateInput = {
+          idVm: data.idVm,
+          displayCode: dataEtalase?.displayCode,
+          itemCode: item.itemCode,
+          locationCode: data.locationCode,
+          firstStock: dataEtalase?.stock,
+          lastStock: newStock,
+          note: `Pengambilan obat pada VM ${data.idVm}`,
+          status: TransactionHistoryStatus.DEBIT,
+        };
 
-        await this.vmTransactionHistoryRepository.create(transactionSave, tx);
+        await this.TransactionHistoryRepository.create(transactionSave, tx);
 
-        let etalaseSave: Partial<VmEtalase> = {
+        let etalaseSave: Partial<Etalase> = {
           stock: newStock,
         };
 
-        await this.vmEtalaseRepository.update(dataEtalase.id, etalaseSave, tx);
+        await this.EtalaseRepository.update(dataEtalase.id, etalaseSave, tx);
 
         console.log("dataEtalase ", dataEtalase);
         payloadVM =

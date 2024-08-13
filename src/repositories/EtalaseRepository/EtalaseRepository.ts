@@ -1,26 +1,26 @@
-import { VmEtalase, Prisma, PrismaClient } from "@prisma/client";
+import { Etalase, Prisma, PrismaClient } from "@prisma/client";
 import { injectable } from "tsyringe";
 import { prisma, TxPrismaClient } from "../../db";
-import { IVMEtalaseRepository } from "./IVMEtalaseRepository";
+import { IEtalaseRepository } from "./IEtalaseRepository";
 
 @injectable()
-export class VMEtalaseRepository implements IVMEtalaseRepository {
-  async create(data: Prisma.VmEtalaseUncheckedCreateInput): Promise<VmEtalase> {
-    return prisma.vmEtalase.create({
+export class EtalaseRepository implements IEtalaseRepository {
+  async create(data: Prisma.EtalaseUncheckedCreateInput): Promise<Etalase> {
+    return prisma.etalase.create({
       data,
     });
   }
 
   async update(
     id: number,
-    data: Partial<VmEtalase>,
+    data: Partial<Etalase>,
     tx: TxPrismaClient | PrismaClient = prisma
   ) {
-    return tx.vmEtalase.update({ where: { id }, data });
+    return tx.etalase.update({ where: { id }, data });
   }
 
-  async getAll(): Promise<VmEtalase[]> {
-    return prisma.vmEtalase.findMany({
+  async getAll(): Promise<Etalase[]> {
+    return prisma.etalase.findMany({
       include: {
         vendingMachine: {
           select: {
@@ -31,12 +31,12 @@ export class VMEtalaseRepository implements IVMEtalaseRepository {
     });
   }
 
-  async delete(id: number): Promise<VmEtalase> {
-    return prisma.vmEtalase.delete({ where: { id } });
+  async delete(id: number): Promise<Etalase> {
+    return prisma.etalase.delete({ where: { id } });
   }
 
-  async getById(id: number): Promise<VmEtalase | null> {
-    const getDataById = await prisma.vmEtalase.findUnique({
+  async getById(id: number): Promise<Etalase | null> {
+    const getDataById = await prisma.etalase.findUnique({
       where: { id },
       include: {
         vendingMachine: {
@@ -51,8 +51,8 @@ export class VMEtalaseRepository implements IVMEtalaseRepository {
     return getDataById;
   }
 
-  async getByItemVm(idVm: number, itemCode: string): Promise<VmEtalase | null> {
-    const getDataById = await prisma.vmEtalase.findMany({
+  async getByItemVm(idVm: number, itemCode: string): Promise<Etalase | null> {
+    const getDataById = await prisma.etalase.findMany({
       where: {
         idVm: idVm,
         itemCode: itemCode,

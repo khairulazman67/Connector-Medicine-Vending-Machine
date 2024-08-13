@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const vmEtalaseCreateSchema = z.object({
+export const EtalaseCreateSchema = z.object({
   idVm: z.coerce.number({
     required_error: "idVm wajib diisi",
     invalid_type_error: "idVm harus berupa number",
@@ -29,7 +29,7 @@ export const vmEtalaseCreateSchema = z.object({
   }),
 });
 
-export const vmEtalaseUpdateSchema = z.object({
+export const EtalaseUpdateSchema = z.object({
   idVm: z.number({
     invalid_type_error: "idVm harus berupa number",
   }),
@@ -52,5 +52,5 @@ export const vmEtalaseUpdateSchema = z.object({
   }),
 });
 
-export type VMEtalaseCreatePayload = z.infer<typeof vmEtalaseCreateSchema>;
-export type VMEtalaseUpdatePayload = z.infer<typeof vmEtalaseUpdateSchema>;
+export type EtalaseCreatePayload = z.infer<typeof EtalaseCreateSchema>;
+export type EtalaseUpdatePayload = z.infer<typeof EtalaseUpdateSchema>;
