@@ -3,12 +3,13 @@ import { VendingMachineRepository } from "../../repositories/VendingMachineRepos
 import { VendingMachine } from "@prisma/client";
 import { VendingMachinePayload } from "../../utils/validations/vendingMachineRequest";
 import { IVendingMachineService } from "./IVendingMachineService";
+import { IVendingMachineRepository } from "../../repositories/VendingMachineRepository/IVendingMachineRepository";
 
 @injectable()
 export class VendingMachineService implements IVendingMachineService {
   constructor(
-    @inject(VendingMachineRepository)
-    private vendingMachineRepository: VendingMachineRepository
+    @inject("IVendingMachineRepository")
+    private vendingMachineRepository: IVendingMachineRepository
   ) {}
 
   async getAllVendingMachines() {

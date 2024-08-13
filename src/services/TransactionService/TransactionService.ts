@@ -1,20 +1,21 @@
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { processTransactionPayload } from "../../utils/validations/transactionRequest";
-import { VMEtalaseRepository } from "../../repositories/VMEtalaseRepository/VMEtalaseRepository";
 import { prisma } from "../../db";
-import { VmTransactionHistoryRepository } from "../../repositories/VmTransactionHistoryRepository/VmTransactionHistoryRepository";
 import { Prisma, TransactionHistoryStatus, VmEtalase } from "@prisma/client";
 import axios from "axios";
 import { baseAdapter } from "../../utils/adapter/axiosAdapter";
 import { ITransactionService } from "./ITransactionService";
+import { IVmTransactionHistoryRepository } from "../../repositories/VmTransactionHistoryRepository/IVmTransactionHistoryRepository";
+import { IVMEtalaseRepository } from "../../repositories/VMEtalaseRepository/IVMEtalaseRepository";
 
 @injectable()
 export class TransactionService implements ITransactionService {
   constructor(
-    // @inject(VmTransactionHistoryRepository)
-    // @inject(VMEtalaseRepository)
-    private vmTransactionHistoryRepository: VmTransactionHistoryRepository,
-    private vmEtalaseRepository: VMEtalaseRepository // private vmEtalaseRepository: VMEtalaseRepository
+    @inject("IVmTransactionHistoryRepository")
+    private vmTransactionHistoryRepository: IVmTransactionHistoryRepository,
+
+    @inject("IVMEtalaseRepository")
+    private vmEtalaseRepository: IVMEtalaseRepository
   ) {}
 
   async processTransactionVM(data: processTransactionPayload) {

@@ -1,13 +1,14 @@
 import { injectable, inject } from "tsyringe";
-import { VMEtalaseRepository } from "../../repositories/VMEtalaseRepository/VMEtalaseRepository";
 import { VMEtalaseCreatePayload } from "../../utils/validations/vmEtalaseRequest";
 import { VmEtalase } from "@prisma/client";
+import { IVMEtalaseRepository } from "../../repositories/VMEtalaseRepository/IVMEtalaseRepository";
+import { IVMEtalaseService } from "./IVMEtalaseService";
 
 @injectable()
-export class VMEtalaseService {
+export class VMEtalaseService implements IVMEtalaseService {
   constructor(
-    @inject(VMEtalaseRepository)
-    private vmEtalaseRepository: VMEtalaseRepository
+    @inject("IVMEtalaseRepository")
+    private vmEtalaseRepository: IVMEtalaseRepository
   ) {}
 
   async createVMEtalase(data: VMEtalaseCreatePayload) {

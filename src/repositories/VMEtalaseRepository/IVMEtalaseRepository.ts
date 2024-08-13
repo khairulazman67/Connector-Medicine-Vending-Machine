@@ -1,13 +1,13 @@
 import { VmEtalase, Prisma, PrismaClient } from "@prisma/client";
 import { injectable } from "tsyringe";
-import { TxPrismaClient } from "../../db";
+import { prisma, TxPrismaClient } from "../../db";
 
 export interface IVMEtalaseRepository {
   create(data: Prisma.VmEtalaseUncheckedCreateInput): Promise<VmEtalase>;
   update(
     id: number,
     data: Partial<VmEtalase>,
-    tx: TxPrismaClient | PrismaClient
+    tx?: TxPrismaClient | PrismaClient
   ): Promise<any>;
 
   getAll(): Promise<VmEtalase[]>;
