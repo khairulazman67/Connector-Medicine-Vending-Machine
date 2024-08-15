@@ -59,7 +59,6 @@ export class TransactionService implements ITransactionService {
           vmId: data.vmId,
           displayCode: dataEtalase?.displayCode,
           itemCode: item.itemCode,
-          locationCode: data.locationCode,
           firstStock: dataEtalase?.stock,
           lastStock: newStock,
           note: `Pengambilan obat pada VM ${data.vmId}`,

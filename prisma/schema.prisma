@@ -15,7 +15,7 @@ datasource db {
 
 enum TransactionHistoryType {
   DEBIT //Penambahan stok
-  KREDIT //Pengurangan stok
+  CREDIT //Pengurangan stok
 }
 
 enum TransactionHistoryStatus {
@@ -53,9 +53,7 @@ model Etalase{
   vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id]) 
   stockOpnameDetail StockOpnameDetail[]
 
-   @@unique([vmId, itemCode]) 
-
-  
+  @@unique([vmId, itemCode]) 
 } 
 
 model TransactionHistory{
@@ -63,7 +61,6 @@ model TransactionHistory{
   vmId  Int                       @map("vm_id")
   displayCode String              @map("display_code")
   itemCode String                 @map("itemCode") @db.VarChar(10) 
-  locationCode String             @map("location_code") @db.VarChar(10)
   firstStock Int                  @map("first_stock")
   lastStock Int                   @map("last_stock")
   createdAt  DateTime             @default(now())

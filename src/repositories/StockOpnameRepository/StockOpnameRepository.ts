@@ -12,7 +12,7 @@ import { injectable } from "tsyringe";
 export class StockOpnameRepository implements IStockOpnameRepository {
   async createSO(
     data: Prisma.StockOpnameUncheckedCreateInput,
-    tx: TxPrismaClient | PrismaClient
+    tx: TxPrismaClient
   ): Promise<StockOpname> {
     return tx.stockOpname.create({
       data,

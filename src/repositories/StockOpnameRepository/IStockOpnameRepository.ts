@@ -9,7 +9,7 @@ import { TxPrismaClient } from "../../db";
 export interface IStockOpnameRepository {
   createSO(
     data: Prisma.StockOpnameUncheckedCreateInput,
-    tx: TxPrismaClient | PrismaClient
+    tx: TxPrismaClient
   ): Promise<StockOpname>;
 
   createSoDetail(

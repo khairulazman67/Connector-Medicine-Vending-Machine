@@ -1,5 +1,9 @@
-import { Prisma } from "@prisma/client";
-import { StockOpnameType } from "../types/stockOpnameType";
+import {
+  Etalase,
+  Prisma,
+  TransactionHistoryStatus,
+  TransactionHistoryType,
+} from "@prisma/client";
 import { processStockOpnamePayload } from "../utils/validations/StockOpnameRequest";
 
 export const stockOpnameDtoCreate = async (
@@ -19,17 +23,22 @@ export const stockOpnameDtoCreate = async (
   };
 };
 
-// export const stockOpnameTransactionHistory = async (
-//   data: processStockOpnamePayload
-// ): Promise<Prisma.TransactionHistoryUncheckedCreateInput> => {
-//   return {
-//     vmId: data.vmId,
-//     displayCode: data.vmId,
-//     itemCode: data.vmId,
-//     firstStock: data.vmId,
-//     lastStock: data.vmId,
-//     transactionType: $Enums.TransactionHistoryType,
-//     status: $Enums.TransactionHistoryStatus,
-//     note: string,
-//   };
-// };
+export const stockOpnameTransactionHistoryDto = async (
+  data: processStockOpnamePayload,
+  etalaseData: Required<Etalase>,
+  otherData: {
+    type: TransactionHistoryType;
+    lastStock: number;
+  }
+): Promise<Prisma.TransactionHistoryUncheckedCreateInput> => {
+  return {
+    vmId: data.vmId,
+    displayCode: etalaseData.displayCode,
+    itemCode: etalaseData.itemCode,
+    firstStock: etalaseData.stock,
+    lastStock: otherData.lastStock,
+    transactionType: otherData.type,
+    status: TransactionHistoryStatus.STOCKOPNAME,
+    note: `Stock opname obat pada VM ${data.vmId}`,
+  };
+};

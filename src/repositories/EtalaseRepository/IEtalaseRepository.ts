@@ -9,9 +9,9 @@ export interface IEtalaseRepository {
     data: Partial<Etalase>,
     tx?: TxPrismaClient | PrismaClient
   ): Promise<any>;
-
   getAll(): Promise<Etalase[]>;
   delete(id: number): Promise<Etalase>;
   getById(id: number): Promise<Etalase | null>;
   getByItemVm(vmId: number, itemCode: string): Promise<Etalase | null>;
+  getByVM(vmId: number): Promise<Etalase[] | null>;
 }

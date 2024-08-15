@@ -8,8 +8,9 @@ export class TransactionHistoryRepository
 {
   async create(
     data: Prisma.TransactionHistoryUncheckedCreateInput,
-    tx: TxPrismaClient | PrismaClient = prisma
+    tx: TxPrismaClient
   ): Promise<TransactionHistory> {
+    console.log("dataa transaction history masok", data);
     return tx.transactionHistory.create({
       data,
     });
