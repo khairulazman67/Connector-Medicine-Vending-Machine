@@ -11,6 +11,10 @@ import { ITransactionHistoryRepository } from "./repositories/TransactionHistory
 import { TransactionHistoryRepository } from "./repositories/TransactionHistoryRepository/TransactionHistoryRepository";
 import { IVendingMachineRepository } from "./repositories/VendingMachineRepository/IVendingMachineRepository";
 import { VendingMachineRepository } from "./repositories/VendingMachineRepository/VendingMachineRepository";
+import { IStockOpnameService } from "./services/StockOpnameService/IStockOpnameService";
+import { StockOpnameService } from "./services/StockOpnameService/StockOpnameService";
+import { IStockOpnameRepository } from "./repositories/StockOpnameRepository/IStockOpnameRepository";
+import { StockOpnameRepository } from "./repositories/StockOpnameRepository/StockOpnameRepository";
 
 container.registerSingleton<ITransactionService>(
   "ITransactionService",
@@ -37,4 +41,14 @@ container.registerSingleton<ITransactionHistoryRepository>(
 container.registerSingleton<IVendingMachineRepository>(
   "IVendingMachineRepository",
   VendingMachineRepository
+);
+
+container.registerSingleton<IStockOpnameService>(
+  "IStockOpnameService",
+  StockOpnameService
+);
+
+container.registerSingleton<IStockOpnameRepository>(
+  "IVendingMachineRepository",
+  StockOpnameRepository
 );

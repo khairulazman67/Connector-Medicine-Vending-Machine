@@ -1,7 +1,7 @@
 import { injectable, inject } from "tsyringe";
 import { VendingMachineRepository } from "../../repositories/VendingMachineRepository/VendingMachineRepository";
 import { VendingMachine } from "@prisma/client";
-import { VendingMachinePayload } from "../../utils/validations/vendingMachineRequest";
+import { VendingMachinePayload } from "../../utils/validations/VendingMachineRequest";
 import { IVendingMachineService } from "./IVendingMachineService";
 import { IVendingMachineRepository } from "../../repositories/VendingMachineRepository/IVendingMachineRepository";
 

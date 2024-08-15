@@ -1,5 +1,5 @@
 import { VendingMachine } from "@prisma/client";
-import { VendingMachinePayload } from "../../utils/validations/vendingMachineRequest";
+import { VendingMachinePayload } from "../../utils/validations/VendingMachineRequest";
 
 export interface IVendingMachineRepository {
   getAll(): Promise<VendingMachine[]>;

@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { processTransactionPayload } from "../../utils/validations/transactionRequest";
+import { processTransactionPayload } from "../../utils/validations/TransactionRequest";
 import { prisma } from "../../db";
 import {
   Prisma,
@@ -39,30 +39,30 @@ export class TransactionService implements ITransactionService {
     await prisma.$transaction(async (tx) => {
       for (const item of data.medicine) {
         const dataEtalase = await this.EtalaseRepository.getByItemVm(
-          data.idVm,
+          data.vmId,
           item.itemCode
         );
 
         if (!dataEtalase) {
           throw new Error(
-            `Etalase vending machine ${data.idVm} dan kode obat ${item.itemCode} tidak ditemukan`
+            `Etalase vending machine ${data.vmId} dan kode obat ${item.itemCode} tidak ditemukan`
           );
         }
 
         const newStock = dataEtalase?.stock - item.amount;
         if (newStock <= 0)
           throw new Error(
-            `Stok vending machine ${data.idVm} dan kode obat ${item.itemCode} tidak mencukupi`
+            `Stok vending machine ${data.vmId} dan kode obat ${item.itemCode} tidak mencukupi`
           );
 
         const transactionSave: Prisma.TransactionHistoryUncheckedCreateInput = {
-          idVm: data.idVm,
+          vmId: data.vmId,
           displayCode: dataEtalase?.displayCode,
           itemCode: item.itemCode,
           locationCode: data.locationCode,
           firstStock: dataEtalase?.stock,
           lastStock: newStock,
-          note: `Pengambilan obat pada VM ${data.idVm}`,
+          note: `Pengambilan obat pada VM ${data.vmId}`,
           status: TransactionHistoryStatus.TAKING,
           transactionType: TransactionHistoryType.DEBIT,
         };

@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const EtalaseCreateSchema = z.object({
-  idVm: z.coerce.number({
-    required_error: "idVm wajib diisi",
-    invalid_type_error: "idVm harus berupa number",
+  vmId: z.coerce.number({
+    required_error: "vmId wajib diisi",
+    invalid_type_error: "vmId harus berupa number",
   }),
   displayCode: z.string({
     required_error: "Display code wajib diisi",
@@ -30,8 +30,8 @@ export const EtalaseCreateSchema = z.object({
 });
 
 export const EtalaseUpdateSchema = z.object({
-  idVm: z.number({
-    invalid_type_error: "idVm harus berupa number",
+  vmId: z.number({
+    invalid_type_error: "vmId harus berupa number",
   }),
   displayCode: z.string({
     invalid_type_error: "displayCode harus berupa string",

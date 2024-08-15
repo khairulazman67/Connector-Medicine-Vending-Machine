@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const processTransactionSchema = z.object({
-  idVm: z.coerce.number({
-    required_error: "idVm wajib diisi",
-    invalid_type_error: "idVm harus berupa number",
+  vmId: z.coerce.number({
+    required_error: "vmId wajib diisi",
+    invalid_type_error: "vmId harus berupa number",
   }),
   locationCode: z.string({
     required_error: "locationCode id wajib diisi",

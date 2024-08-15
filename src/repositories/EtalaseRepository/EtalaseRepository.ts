@@ -51,17 +51,17 @@ export class EtalaseRepository implements IEtalaseRepository {
     return getDataById;
   }
 
-  async getByItemVm(idVm: number, itemCode: string): Promise<Etalase | null> {
+  async getByItemVm(vmId: number, itemCode: string): Promise<Etalase | null> {
     const getDataById = await prisma.etalase.findMany({
       where: {
-        idVm: idVm,
+        vmId: vmId,
         itemCode: itemCode,
       },
     });
 
     if (!getDataById || getDataById.length <= 0)
       throw new Error(
-        `Etalase vending machine ${idVm} dan kode obat ${itemCode} tidak ditemukan`
+        `Etalase vending machine ${vmId} dan kode obat ${itemCode} tidak ditemukan`
       );
     return getDataById[0];
   }

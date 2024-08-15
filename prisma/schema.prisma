@@ -29,6 +29,13 @@ model Fasyankes{
   VendingMachine       VendingMachine[]
 }
 
+model SetLocation{
+  id    Int                       @id @default(autoincrement())
+  vmId  Int                       @map("vm_id") 
+
+  locationCode String             @map("location_code")           @unique
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id]) 
+} 
 model VendingMachine {
   id Int                        @id @default(autoincrement())
   name String                   
@@ -44,19 +51,19 @@ model VendingMachine {
 
 model Etalase{
   id Int                          @id @default(autoincrement())
-  idVm           Int              @map("id_vm") 
+  vmId           Int              @map("vm_id") 
   displayCode String              @map("display_code")   @db.VarChar(10)    
   itemCode String                 @map("item_code")      @db.VarChar(10)
   medicineName String             @map("medicine_name")  @db.VarChar(100)
   maxStock Int                    @map("max_stock")       
   stock Int                       @map("stock")     
-  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) 
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id]) 
   stockOpnameDetail StockOpnameDetail[]
 } 
 
 model TransactionHistory{
   id    Int                       @id @default(autoincrement())
-  idVm  Int                       @map("id_vm")
+  vmId  Int                       @map("vm_id")
   displayCode String              @map("display_code")
   itemCode String                 @map("itemCode") @db.VarChar(10) 
   locationCode String             @map("location_code") @db.VarChar(10)
@@ -66,17 +73,20 @@ model TransactionHistory{
   transactionType TransactionHistoryType   @map("transaction_type")
   status TransactionHistoryStatus @map("status")
   note String                     @map("note")
-  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id])
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
 } 
+
 
 model StockOpname{
   id    Int                       @id @default(autoincrement())
-  idVm  Int                       @map("id_vm")
+  soCode String                   @map("so_code") @unique
+  vmId  Int                       @map("vm_id")
   note String                     @map("note")
+  soDateTime  DateTime            @default(now())
   createdAt  DateTime             @default(now())
 
-  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id])
-  stockOpnameDetail StockOpnameDetail[]
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
+  details StockOpnameDetail[]
 }
 
 model StockOpnameDetail{
@@ -88,12 +98,3 @@ model StockOpnameDetail{
   stockOpname  StockOpname        @relation(fields: [soId], references: [id]) 
   etalase  Etalase                @relation(fields: [etalaseId], references: [id]) 
 } 
-
-model SetLocation{
-  id    Int                       @id @default(autoincrement())
-  idVm  Int                       @map("id_vm") 
-
-  locationCode String             @map("location_code")           @unique
-  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) 
-} 
-

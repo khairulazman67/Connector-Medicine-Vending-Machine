@@ -13,5 +13,5 @@ export interface IEtalaseRepository {
   getAll(): Promise<Etalase[]>;
   delete(id: number): Promise<Etalase>;
   getById(id: number): Promise<Etalase | null>;
-  getByItemVm(idVm: number, itemCode: string): Promise<Etalase | null>;
+  getByItemVm(vmId: number, itemCode: string): Promise<Etalase | null>;
 }

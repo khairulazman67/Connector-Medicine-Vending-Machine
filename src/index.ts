@@ -4,6 +4,7 @@ import "./dependencyInjection";
 import VendingMachineRoute from "./routes/VendingMachineRoute";
 import EtalaseRoute from "./routes/EtalaseRoute";
 import TransactionRoute from "./routes/TransactionRoute";
+import StockOpnameRoute from "./routes/StockOpnameRoute";
 import { globalErrorHandler } from "./middleware/errorHandler";
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/v1/vm", VendingMachineRoute);
 app.use("/v1/etalase", EtalaseRoute);
 app.use("/v1/transaction", TransactionRoute);
+app.use("/v1/stock-opname", StockOpnameRoute);
 
 // Error handling middleware
 app.use(globalErrorHandler);
