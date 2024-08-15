@@ -28,6 +28,11 @@ container.registerSingleton<IVendingMachineService>(
 
 container.registerSingleton<IEtalaseService>("IEtalaseService", EtalaseService);
 
+container.registerSingleton<IStockOpnameService>(
+  "IStockOpnameService",
+  StockOpnameService
+);
+
 container.registerSingleton<IEtalaseRepository>(
   "IEtalaseRepository",
   EtalaseRepository
@@ -43,12 +48,7 @@ container.registerSingleton<IVendingMachineRepository>(
   VendingMachineRepository
 );
 
-container.registerSingleton<IStockOpnameService>(
-  "IStockOpnameService",
-  StockOpnameService
-);
-
 container.registerSingleton<IStockOpnameRepository>(
-  "IVendingMachineRepository",
+  "IStockOpnameRepository",
   StockOpnameRepository
 );

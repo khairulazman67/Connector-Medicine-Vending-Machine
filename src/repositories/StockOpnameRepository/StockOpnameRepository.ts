@@ -1,4 +1,3 @@
-import { injectable } from "tsyringe";
 import {
   Prisma,
   PrismaClient,
@@ -7,6 +6,7 @@ import {
 } from "@prisma/client";
 import { TxPrismaClient } from "../../db";
 import { IStockOpnameRepository } from "./IStockOpnameRepository";
+import { injectable } from "tsyringe";
 
 @injectable()
 export class StockOpnameRepository implements IStockOpnameRepository {
