@@ -18,3 +18,18 @@ export const stockOpnameDtoCreate = async (
     },
   };
 };
+
+// export const stockOpnameTransactionHistory = async (
+//   data: processStockOpnamePayload
+// ): Promise<Prisma.TransactionHistoryUncheckedCreateInput> => {
+//   return {
+//     vmId: data.vmId,
+//     displayCode: data.vmId,
+//     itemCode: data.vmId,
+//     firstStock: data.vmId,
+//     lastStock: data.vmId,
+//     transactionType: $Enums.TransactionHistoryType,
+//     status: $Enums.TransactionHistoryStatus,
+//     note: string,
+//   };
+// };

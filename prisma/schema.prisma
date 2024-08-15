@@ -29,13 +29,6 @@ model Fasyankes{
   VendingMachine       VendingMachine[]
 }
 
-model SetLocation{
-  id    Int                       @id @default(autoincrement())
-  vmId  Int                       @map("vm_id") 
-
-  locationCode String             @map("location_code")           @unique
-  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id]) 
-} 
 model VendingMachine {
   id Int                        @id @default(autoincrement())
   name String                   
@@ -45,7 +38,6 @@ model VendingMachine {
   
   etalase  Etalase[]      
   vendingMachine  TransactionHistory[]
-  setLocation  SetLocation[]
   stockOpname StockOpname[]
 }
 
@@ -56,9 +48,14 @@ model Etalase{
   itemCode String                 @map("item_code")      @db.VarChar(10)
   medicineName String             @map("medicine_name")  @db.VarChar(100)
   maxStock Int                    @map("max_stock")       
-  stock Int                       @map("stock")     
+  stock Int                       @map("stock") 
+   
   vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id]) 
   stockOpnameDetail StockOpnameDetail[]
+
+   @@unique([vmId, itemCode]) 
+
+  
 } 
 
 model TransactionHistory{
@@ -75,8 +72,6 @@ model TransactionHistory{
   note String                     @map("note")
   vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
 } 
-
-
 model StockOpname{
   id    Int                       @id @default(autoincrement())
   soCode String                   @map("so_code") @unique
