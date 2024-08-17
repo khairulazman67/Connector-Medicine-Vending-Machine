@@ -22,6 +22,12 @@ enum TransactionHistoryStatus {
   TAKING
   STOCKOPNAME
 }
+
+enum StockOpnameStatus {
+  OPEN
+  PROCESS
+  COMPLETED
+}
 model Fasyankes{
   id                  Int         @id @default(autoincrement())
   fasyankesCode       String      @map("fasyankes_code")         @db.VarChar(10)
@@ -74,9 +80,9 @@ model StockOpname{
   soCode String                   @map("so_code") @unique
   vmId  Int                       @map("vm_id")
   note String                     @map("note")
-  soDateTime  DateTime            @default(now())
-  createdAt  DateTime             @default(now())
-
+  soDateTime  DateTime            @default(now()) @map("so_date_time")
+  createdAt  DateTime             @default(now()) @map("created_at")
+  status StockOpnameStatus      
   vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
   details StockOpnameDetail[]
 }

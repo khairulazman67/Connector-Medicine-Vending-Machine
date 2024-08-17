@@ -1,6 +1,7 @@
 import {
   Etalase,
   Prisma,
+  StockOpnameStatus,
   TransactionHistoryStatus,
   TransactionHistoryType,
 } from "@prisma/client";
@@ -10,6 +11,7 @@ export const stockOpnameDtoCreate = async (
   data: processStockOpnamePayload,
   otherData: {
     soCode: string;
+    status: StockOpnameStatus;
   }
 ): Promise<Prisma.StockOpnameUncheckedCreateInput> => {
   return {
@@ -17,6 +19,7 @@ export const stockOpnameDtoCreate = async (
     vmId: data.vmId,
     note: data.note,
     soDateTime: data.soDateTime,
+    status: otherData.status,
     details: {
       create: data.details,
     },

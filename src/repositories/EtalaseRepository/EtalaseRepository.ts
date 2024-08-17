@@ -2,6 +2,7 @@ import { Etalase, Prisma, PrismaClient } from "@prisma/client";
 import { injectable } from "tsyringe";
 import { prisma, TxPrismaClient } from "../../db";
 import { IEtalaseRepository } from "./IEtalaseRepository";
+import { NotFoundError } from "../../utils/errors/DynamicCustomError";
 
 export class EtalaseRepository implements IEtalaseRepository {
   async create(data: Prisma.EtalaseUncheckedCreateInput): Promise<Etalase> {
@@ -44,7 +45,7 @@ export class EtalaseRepository implements IEtalaseRepository {
       },
     });
     if (!getDataById)
-      throw new Error(`Vending machine etalase with id ${id} not found`);
+      throw new NotFoundError(`Vending machine etalase with id ${id} `);
     return getDataById;
   }
 
@@ -57,8 +58,8 @@ export class EtalaseRepository implements IEtalaseRepository {
     });
 
     if (!getDataById || getDataById.length <= 0)
-      throw new Error(
-        `Etalase vending machine ${vmId} dan kode obat ${itemCode} tidak ditemukan`
+      throw new NotFoundError(
+        `Etalase vending machine ${vmId} dan kode obat ${itemCode}`
       );
     return getDataById[0];
   }
@@ -70,7 +71,7 @@ export class EtalaseRepository implements IEtalaseRepository {
       },
     });
     if (!getDataById || getDataById.length <= 0)
-      throw new Error(`Etalase vending machine ${vmId} tidak ditemukan`);
+      throw new NotFoundError(`Etalase vending machine ${vmId}`);
     return getDataById;
   }
 }

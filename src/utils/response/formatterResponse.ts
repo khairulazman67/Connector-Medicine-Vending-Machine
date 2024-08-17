@@ -1,7 +1,8 @@
-import type { Response } from "express";
-import type { ZodError } from "zod";
-import { formatZodError } from "./validationResponse";
+import { ZodError } from "zod";
 
+interface errorMessages {
+  [key: string]: string;
+}
 export class FormatterResponse {
   static success<T>(data?: T, message: string = "Operation successful") {
     return {
@@ -12,21 +13,32 @@ export class FormatterResponse {
     };
   }
 
-  static error(message: string, code: number = 500, stack?: string) {
+  static error(
+    message: string = "Something went wrong",
+    code: number = 400,
+    stack?: string,
+    data?: any
+  ) {
     return {
-      code,
       status: "error",
+      code,
       message,
+      data,
       ...(stack && { stack }),
     };
   }
-
-  static invalidPayloadResp(r: Response, err: ZodError, status: number = 402) {
-    r.status(status).json({
-      code: status,
-      status: "error",
-      message: "form validation error",
-      error: formatZodError(err),
-    });
-  }
 }
+
+export const formatZodError = (err: ZodError) => {
+  const { fieldErrors } = err.flatten();
+  const errors: errorMessages = {};
+
+  for (let key of Object.keys(fieldErrors)) {
+    const errorMsg = fieldErrors[key];
+    if (errorMsg != undefined) {
+      errors[key] = errorMsg[0];
+    }
+  }
+
+  return errors;
+};

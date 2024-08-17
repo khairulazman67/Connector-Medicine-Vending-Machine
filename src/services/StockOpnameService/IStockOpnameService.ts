@@ -1,5 +1,9 @@
-import { processStockOpnamePayload } from "../../utils/validations/StockOpnameRequest";
+import {
+  createStockOpnamePayload,
+  processStockOpnamePayload,
+} from "../../utils/validations/StockOpnameRequest";
 
 export interface IStockOpnameService {
-  createSO(data: processStockOpnamePayload): Promise<any>;
+  createSO(data: createStockOpnamePayload): Promise<any>;
+  processSO(data: processStockOpnamePayload): Promise<any | unknown>;
 }

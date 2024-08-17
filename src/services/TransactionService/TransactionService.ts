@@ -12,6 +12,10 @@ import { baseAdapter } from "../../utils/adapter/axiosAdapter";
 import { ITransactionService } from "./ITransactionService";
 import { ITransactionHistoryRepository } from "../../repositories/TransactionHistoryRepository/ITransactionHistoryRepository";
 import { IEtalaseRepository } from "../../repositories/EtalaseRepository/IEtalaseRepository";
+import {
+  NotFoundError,
+  UnprocessableError,
+} from "../../utils/errors/DynamicCustomError";
 
 @injectable()
 export class TransactionService implements ITransactionService {
@@ -44,14 +48,14 @@ export class TransactionService implements ITransactionService {
         );
 
         if (!dataEtalase) {
-          throw new Error(
-            `Etalase vending machine ${data.vmId} dan kode obat ${item.itemCode} tidak ditemukan`
+          throw new NotFoundError(
+            `Etalase vending machine ${data.vmId} dan kode obat ${item.itemCode}`
           );
         }
 
         const newStock = dataEtalase?.stock - item.amount;
         if (newStock <= 0)
-          throw new Error(
+          throw new UnprocessableError(
             `Stok vending machine ${data.vmId} dan kode obat ${item.itemCode} tidak mencukupi`
           );
 

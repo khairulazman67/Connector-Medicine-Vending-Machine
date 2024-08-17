@@ -1,3 +1,5 @@
+import { StockOpnameStatus } from "@prisma/client";
+
 export interface StockOpnameDetailType {
   id?: number;
   etalaseId: number;
@@ -12,4 +14,9 @@ export interface StockOpnameType {
   note: string;
   soDateTime: Date | string;
   details: StockOpnameDetailType[];
+}
+
+export interface StockOpnameWhereAnd {
+  soCode?: string;
+  status?: StockOpnameStatus;
 }

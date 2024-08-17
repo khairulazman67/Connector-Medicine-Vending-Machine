@@ -4,14 +4,35 @@ import {
   StockOpname,
   StockOpnameDetail,
 } from "@prisma/client";
-import { TxPrismaClient } from "../../db";
+import { prisma, TxPrismaClient } from "../../db";
 import { IStockOpnameRepository } from "./IStockOpnameRepository";
 import { injectable } from "tsyringe";
 import moment from "moment";
+import { StockOpnameWhereAnd } from "../../types/stockOpnameType";
 
 @injectable()
 export class StockOpnameRepository implements IStockOpnameRepository {
   async createSO(
+    data: Prisma.StockOpnameUncheckedCreateInput,
+    tx: TxPrismaClient | PrismaClient
+  ): Promise<StockOpname> {
+    return tx.stockOpname.create({
+      data,
+    });
+  }
+  async getStockOpname(
+    params: StockOpnameWhereAnd
+  ): Promise<StockOpname | null> {
+    return await prisma.stockOpname.findFirst({
+      where: {
+        AND: params,
+      },
+      include: {
+        details: true, // Termasuk detail dalam query
+      },
+    });
+  }
+  async processSO(
     data: Prisma.StockOpnameUncheckedCreateInput,
     tx: TxPrismaClient
   ): Promise<StockOpname> {
