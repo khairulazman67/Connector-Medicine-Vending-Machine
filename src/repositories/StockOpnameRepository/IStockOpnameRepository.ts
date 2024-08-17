@@ -16,4 +16,11 @@ export interface IStockOpnameRepository {
     data: Prisma.StockOpnameDetailUncheckedCreateInput,
     tx: TxPrismaClient | PrismaClient
   ): Promise<StockOpnameDetail>;
+
+  generateSoCode(
+    vmId: number,
+
+    tx: TxPrismaClient | PrismaClient,
+    date?: string
+  ): Promise<string>;
 }

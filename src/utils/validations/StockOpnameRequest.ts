@@ -1,10 +1,6 @@
 import { z } from "zod";
 
 export const createStockOpnameSchema = z.object({
-  // soCode: z.coerce.string({
-  //   required_error: "soCode wajib diisi",
-  //   invalid_type_error: "soCode harus berupa string",
-  // }),
   vmId: z.coerce.number({
     required_error: "vmId wajib diisi",
     invalid_type_error: "vmId harus berupa number",

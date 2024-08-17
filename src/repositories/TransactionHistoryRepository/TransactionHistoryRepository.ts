@@ -10,7 +10,6 @@ export class TransactionHistoryRepository
     data: Prisma.TransactionHistoryUncheckedCreateInput,
     tx: TxPrismaClient
   ): Promise<TransactionHistory> {
-    console.log("dataa transaction history masok", data);
     return tx.transactionHistory.create({
       data,
     });
