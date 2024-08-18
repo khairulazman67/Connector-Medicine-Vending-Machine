@@ -34,7 +34,7 @@ export class BadRouteError extends DynamicCustomError {
 
 export class NotFoundError extends DynamicCustomError {
   constructor(message: string = "") {
-    super(message + " tidak ditemukan", 404);
+    super(message, 404);
   }
 }
 
@@ -47,5 +47,11 @@ export class UnprocessableError extends DynamicCustomError {
 export class InvalidPayloadError extends DynamicCustomError {
   constructor(message: string = "", data?: any) {
     super(message, 422, formatZodError(data));
+  }
+}
+
+export class ForbiddenError extends DynamicCustomError {
+  constructor(message: string = "") {
+    super(message, 403);
   }
 }

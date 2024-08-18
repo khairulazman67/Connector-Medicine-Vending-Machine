@@ -7,6 +7,7 @@ import { IStockOpnameService } from "./IStockOpnameService";
 import { inject, injectable } from "tsyringe";
 import * as crypto from "node:crypto";
 import {
+  stockOpnameDetailDtoCreate,
   stockOpnameDtoCreate,
   stockOpnameTransactionHistoryDto,
 } from "../../dtos/stockOpname.dto";
@@ -18,9 +19,14 @@ import {
 } from "@prisma/client";
 import { ITransactionHistoryRepository } from "../../repositories/TransactionHistoryRepository/ITransactionHistoryRepository";
 import { IEtalaseRepository } from "../../repositories/EtalaseRepository/IEtalaseRepository";
-import { NotFoundError } from "../../utils/errors/DynamicCustomError";
+import {
+  NotFoundError,
+  UnprocessableError,
+} from "../../utils/errors/DynamicCustomError";
 import { CustomError } from "../../utils/errors/CustomError";
 import { StockOpnameWhereAnd } from "../../types/stockOpnameType";
+import { ILockingRepository } from "../../repositories/LockingRepository/ILockingRepository";
+import { NextFunction } from "express";
 
 @injectable()
 export class StockOpnameService implements IStockOpnameService {
@@ -32,12 +38,17 @@ export class StockOpnameService implements IStockOpnameService {
     private etalaseRepository: IEtalaseRepository,
 
     @inject("ITransactionHistoryRepository")
-    private transactionHistory: ITransactionHistoryRepository
+    private transactionHistory: ITransactionHistoryRepository,
+
+    @inject("ILockingRepository")
+    private lockingRepository: ILockingRepository
   ) {}
 
-  async createSO(data: createStockOpnamePayload): Promise<any> {
+  async createSO(
+    data: createStockOpnamePayload
+  ): Promise<StockOpname | undefined> {
     try {
-      await prisma.$transaction(async (tx) => {
+      const result = await prisma.$transaction(async (tx) => {
         const saveData = {
           ...data,
           soCode: await this.stockOpnameRepository.generateSoCode(
@@ -46,9 +57,9 @@ export class StockOpnameService implements IStockOpnameService {
           ),
           status: StockOpnameStatus.OPEN,
         };
-        const save = await this.stockOpnameRepository.createSO(saveData, tx);
-        return true;
+        return await this.stockOpnameRepository.createSO(saveData, tx);
       });
+      return result;
     } catch (error) {
       if (error instanceof CustomError) {
         throw new NotFoundError(error.message);
@@ -79,7 +90,17 @@ export class StockOpnameService implements IStockOpnameService {
           for (const item of schedule) {
             await this.stockOpnameRepository.updateSo(
               { status: StockOpnameStatus.PROCESS },
-              item.id,
+              {
+                soId: item.id,
+              },
+              tx
+            );
+
+            await this.lockingRepository.createLocking(
+              {
+                vmId: item.vmId,
+                message: `Transaksi ditutup sementara dikarenakan stock Opname dengan kode ${item.soCode} sedang diproses`,
+              },
               tx
             );
           }
@@ -95,33 +116,48 @@ export class StockOpnameService implements IStockOpnameService {
     }
   }
 
-  async processSO(data: processStockOpnamePayload): Promise<any | unknown> {
+  async processSO(
+    data: processStockOpnamePayload,
+    soCode: string,
+    next?: NextFunction
+  ): Promise<any | unknown> {
     try {
-      if (
-        !this.stockOpnameRepository.getStockOpname({
-          soCode: data.soCode,
-          status: StockOpnameStatus.PROCESS,
-        })
-      )
-        throw new NotFoundError(`Stock Opname dengan kode ${data.soCode}`);
+      const soData = await this.stockOpnameRepository.getStockOpname({
+        soCode: soCode,
+        status: StockOpnameStatus.PROCESS,
+      });
+      if (!soData)
+        throw new NotFoundError(`Stock Opname dengan kode ${soCode}`);
 
       await prisma.$transaction(async (tx) => {
-        const newKodeSO = await this.stockOpnameRepository.generateSoCode(
-          data.vmId,
-          tx
-        );
-        const stockOpnameDto = await stockOpnameDtoCreate(data, {
-          status: StockOpnameStatus.COMPLETED,
-          soCode: newKodeSO,
-        });
-
         const etalaseData = await this.etalaseRepository.getByVM(data.vmId);
         if (!etalaseData) {
           throw new NotFoundError(`Etalase vending machine ${data.vmId}`);
         }
-        await this.stockOpnameRepository.processSO(stockOpnameDto, tx);
+        await this.stockOpnameRepository.updateSo(
+          {
+            status: StockOpnameStatus.COMPLETED,
+          },
+          {
+            soCode: soCode,
+          },
+          tx
+        );
+
+        if (data.details.length !== etalaseData.length)
+          throw new UnprocessableError(
+            `Jumlah stock detail tidak sesuai dengan jumlah vending machine ${data.vmId}`
+          );
 
         for (const element of data.details) {
+          await this.stockOpnameRepository.createSoDetail(
+            {
+              ...element,
+              soId: soData.id ?? 0,
+            },
+            tx
+          );
+
           const findData = etalaseData.find(
             (val) => val.id == element.etalaseId
           );
@@ -151,12 +187,10 @@ export class StockOpnameService implements IStockOpnameService {
             tx
           );
         }
+        await this.lockingRepository.removeLocking(data.vmId, tx);
       });
     } catch (error) {
-      if (error instanceof CustomError) {
-        throw new NotFoundError(error.message);
-      }
-      throw new Error(`There is an error ${error}`);
+      throw error;
     }
   }
 }

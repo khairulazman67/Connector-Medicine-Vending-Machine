@@ -20,7 +20,10 @@ export interface IStockOpnameRepository {
 
   updateSo(
     data: Prisma.StockOpnameUncheckedUpdateInput,
-    soId: number,
+    id: {
+      soId?: number;
+      soCode?: string;
+    },
     tx: TxPrismaClient | PrismaClient
   ): Promise<StockOpname>;
 

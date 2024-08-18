@@ -102,7 +102,6 @@ export class TransactionService implements ITransactionService {
     //   .catch((error) => {
     //     console.error("Error:", error);
     //   });
-
-    console.log("send data ", payloadVM);
+    return payloadVM;
   }
 }

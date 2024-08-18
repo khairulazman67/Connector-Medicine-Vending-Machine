@@ -40,11 +40,12 @@ model VendingMachine {
   name String                   
   idFasyankes Int               @map("fasyankes_id")          
   isPaperlessHospital           Boolean  @default(true) @map("is_paperless_hospital")
-  fasyankes  Fasyankes  @relation(fields: [idFasyankes], references: [id]) 
+  fasyankes  Fasyankes          @relation(fields: [idFasyankes], references: [id]) 
   
   etalase  Etalase[]      
   vendingMachine  TransactionHistory[]
   stockOpname StockOpname[]
+  locking Locking[]
 }
 
 model Etalase{
@@ -77,7 +78,7 @@ model TransactionHistory{
 } 
 model StockOpname{
   id    Int                       @id @default(autoincrement())
-  soCode String                   @map("so_code") @unique
+  soCode String                   @map("so_code") @unique @db.VarChar(15)
   vmId  Int                       @map("vm_id")
   note String                     @map("note")
   soDateTime  DateTime            @default(now()) @map("so_date_time")
@@ -96,3 +97,10 @@ model StockOpnameDetail{
   stockOpname  StockOpname        @relation(fields: [soId], references: [id]) 
   etalase  Etalase                @relation(fields: [etalaseId], references: [id]) 
 } 
+
+model Locking{
+  id    Int                       @id @default(autoincrement())
+  vmId  Int                       @map("vm_id") @unique
+  message String
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
+}

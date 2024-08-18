@@ -20,7 +20,10 @@ export class StockOpnameController {
   }
   async processSO(req: Request, res: Response, next: NextFunction) {
     try {
-      const process = await this.stockOpnameService.processSO(req.body);
+      const process = await this.stockOpnameService.processSO(
+        req.body,
+        req.params.soCode
+      );
       res.json(FormatterResponse.success(process, "SO berhasil di proses"));
     } catch (error) {
       next(error);

@@ -68,10 +68,16 @@ export class StockOpnameRepository implements IStockOpnameRepository {
 
   async updateSo(
     data: Prisma.StockOpnameUncheckedUpdateInput,
-    soId: number,
+    id: {
+      soId?: number;
+      soCode?: string;
+    },
     tx: TxPrismaClient | PrismaClient
   ): Promise<StockOpname> {
-    return tx.stockOpname.update({ data, where: { id: soId } });
+    return tx.stockOpname.update({
+      data,
+      where: { id: id.soId, soCode: id.soCode },
+    });
   }
 
   async generateSoCode(
@@ -80,12 +86,11 @@ export class StockOpnameRepository implements IStockOpnameRepository {
     date: string = moment().format("YYYYMMDD")
   ): Promise<string> {
     const nextData = await tx.$queryRaw<{ next_increment: number }[]>`
-
     SELECT COALESCE(MAX(CAST(RIGHT(so_code, 2) AS INTEGER)), 0)+1 AS next_increment
     FROM "StockOpname"
     WHERE so_code LIKE CONCAT('SO-', ${date}, '-', ${vmId}, '%') and vm_id = ${vmId}`;
-    const nextValue = nextData?.[0]?.next_increment ?? 1;
 
+    const nextValue = nextData?.[0]?.next_increment ?? 1;
     return `SO-${date}-${vmId}${nextValue.toString().padStart(2, "0")}`;
   }
 }

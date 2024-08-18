@@ -26,6 +26,14 @@ export const stockOpnameDtoCreate = async (
   };
 };
 
+export const stockOpnameDetailDtoCreate = async (
+  data: Prisma.StockOpnameDetailUncheckedCreateInput
+): Promise<Prisma.StockOpnameDetailUncheckedCreateInput> => {
+  return {
+    ...data,
+  };
+};
+
 export const stockOpnameTransactionHistoryDto = async (
   data: processStockOpnamePayload,
   etalaseData: Required<Etalase>,
