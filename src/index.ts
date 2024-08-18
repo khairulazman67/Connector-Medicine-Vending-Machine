@@ -35,8 +35,6 @@ if (process.env.STOCK_OPNAME_JOB_ENABLED === "true") {
   const StockOpnameSchedulerImpl = container.resolve(StockOpnameScheduler);
   StockOpnameSchedulerImpl.start;
 }
-
-logger.fatal("Ini adalah contoh fatal");
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
