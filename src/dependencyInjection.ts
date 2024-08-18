@@ -15,7 +15,6 @@ import { IStockOpnameService } from "./services/StockOpnameService/IStockOpnameS
 import { StockOpnameService } from "./services/StockOpnameService/StockOpnameService";
 import { IStockOpnameRepository } from "./repositories/StockOpnameRepository/IStockOpnameRepository";
 import { StockOpnameRepository } from "./repositories/StockOpnameRepository/StockOpnameRepository";
-import { StockOpnameScheduler } from "./jobs/stockOpnameScheduler";
 import { ILockingRepository } from "./repositories/LockingRepository/ILockingRepository";
 import { LockingRepository } from "./repositories/LockingRepository/LockingRepository";
 
@@ -60,7 +59,3 @@ container.registerSingleton<ILockingRepository>(
   "ILockingRepository",
   LockingRepository
 );
-
-// Stock Opname Job Scheduler
-const StockOpnameSchedulerImpl = container.resolve(StockOpnameScheduler);
-StockOpnameSchedulerImpl.start;

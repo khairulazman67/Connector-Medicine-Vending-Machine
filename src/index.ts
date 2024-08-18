@@ -7,6 +7,9 @@ import TransactionRoute from "./routes/TransactionRoute";
 import StockOpnameRoute from "./routes/StockOpnameRoute";
 import { BadRouteError } from "./utils/errors/DynamicCustomError";
 import { errorHandler } from "./middleware/errorHandler";
+import { container } from "tsyringe";
+import { StockOpnameScheduler } from "./jobs/stockOpnameScheduler";
+import { logger } from "./logs/pino";
 
 const app = express();
 const port = process.env.PORT;
@@ -27,6 +30,13 @@ app.all("/*", () => {
 // Error handling middleware
 app.use(errorHandler);
 
+// Stock Opname Job Scheduler
+if (process.env.STOCK_OPNAME_JOB_ENABLED === "true") {
+  const StockOpnameSchedulerImpl = container.resolve(StockOpnameScheduler);
+  StockOpnameSchedulerImpl.start;
+}
+
+logger.fatal("Ini adalah contoh fatal");
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

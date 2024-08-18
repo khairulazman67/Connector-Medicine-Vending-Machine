@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../utils/errors/CustomError";
 import { FormatterResponse } from "../utils/response/formatterResponse";
+// import { logger } from "../logs/pino";
 export const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  // logger.error(err);
   if (err instanceof CustomError) {
     return res.status(err.statusCode).send(err.formatErrors());
   }
