@@ -1,32 +1,31 @@
 import "reflect-metadata";
 import express from "express";
-import { container } from "tsyringe";
+import "./dependencyInjection";
 import VendingMachineRoute from "./routes/VendingMachineRoute";
-import VMEtalaseRoute from "./routes/VMEtalaseRoute";
-import { globalErrorHandler } from "./middleware/errorHandler";
-import { VendingMachineService } from "./services/VendingMachineService";
-import { VendingMachineRepository } from "./repositories/VendingMachineRepository";
-import { VMEtalaseRepository } from "./repositories/VMEtalaseRepository";
-import { VMEtalaseService } from "./services/VMEtalaseService";
+import EtalaseRoute from "./routes/EtalaseRoute";
+import TransactionRoute from "./routes/TransactionRoute";
+import StockOpnameRoute from "./routes/StockOpnameRoute";
+import { BadRouteError } from "./utils/errors/DynamicCustomError";
+import { errorHandler } from "./middleware/errorHandler";
+
 const app = express();
 const port = process.env.PORT;
 
 // Middleware
 app.use(express.json());
 
-// Register services and repositories
-container.registerSingleton(VendingMachineRepository);
-container.registerSingleton(VendingMachineService);
-
-container.registerSingleton(VMEtalaseRepository);
-container.registerSingleton(VMEtalaseService);
-
 // Routes
 app.use("/v1/vm", VendingMachineRoute);
-app.use("/v1/vm-etalase", VMEtalaseRoute);
+app.use("/v1/etalase", EtalaseRoute);
+app.use("/v1/transaction", TransactionRoute);
+app.use("/v1/stock-opname", StockOpnameRoute);
+
+app.all("/*", () => {
+  throw new BadRouteError();
+});
 
 // Error handling middleware
-app.use(globalErrorHandler);
+app.use(errorHandler);
 
 // Start server
 app.listen(port, () => {

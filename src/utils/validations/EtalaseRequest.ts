@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const vmEtalaseCreateSchema = z.object({
-  idVm: z.coerce.number({
-    required_error: "idVm wajib diisi",
-    invalid_type_error: "idVm harus berupa number",
+export const EtalaseCreateSchema = z.object({
+  vmId: z.coerce.number({
+    required_error: "vmId wajib diisi",
+    invalid_type_error: "vmId harus berupa number",
   }),
   displayCode: z.string({
     required_error: "Display code wajib diisi",
@@ -29,9 +29,9 @@ export const vmEtalaseCreateSchema = z.object({
   }),
 });
 
-export const vmEtalaseUpdateSchema = z.object({
-  idVm: z.number({
-    invalid_type_error: "idVm harus berupa number",
+export const EtalaseUpdateSchema = z.object({
+  vmId: z.number({
+    invalid_type_error: "vmId harus berupa number",
   }),
   displayCode: z.string({
     invalid_type_error: "displayCode harus berupa string",
@@ -52,5 +52,5 @@ export const vmEtalaseUpdateSchema = z.object({
   }),
 });
 
-export type VMEtalaseCreatePayload = z.infer<typeof vmEtalaseCreateSchema>;
-export type VMEtalaseUpdatePayload = z.infer<typeof vmEtalaseUpdateSchema>;
+export type EtalaseCreatePayload = z.infer<typeof EtalaseCreateSchema>;
+export type EtalaseUpdatePayload = z.infer<typeof EtalaseUpdateSchema>;

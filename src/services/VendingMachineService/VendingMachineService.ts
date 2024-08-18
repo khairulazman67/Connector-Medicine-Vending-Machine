@@ -1,13 +1,15 @@
 import { injectable, inject } from "tsyringe";
-import { VendingMachineRepository } from "../repositories/VendingMachineRepository";
+import { VendingMachineRepository } from "../../repositories/VendingMachineRepository/VendingMachineRepository";
 import { VendingMachine } from "@prisma/client";
-import { VendingMachinePayload } from "../utils/validations/vendingMachineRequest";
+import { VendingMachinePayload } from "../../utils/validations/VendingMachineRequest";
+import { IVendingMachineService } from "./IVendingMachineService";
+import { IVendingMachineRepository } from "../../repositories/VendingMachineRepository/IVendingMachineRepository";
 
 @injectable()
-export class VendingMachineService {
+export class VendingMachineService implements IVendingMachineService {
   constructor(
-    @inject(VendingMachineRepository)
-    private vendingMachineRepository: VendingMachineRepository
+    @inject("IVendingMachineRepository")
+    private vendingMachineRepository: IVendingMachineRepository
   ) {}
 
   async getAllVendingMachines() {
@@ -19,7 +21,6 @@ export class VendingMachineService {
   }
 
   async createVendingMachine(data: VendingMachinePayload) {
-    // throw new Error("Value must be greater than 0");
     return this.vendingMachineRepository.create(data);
   }
 

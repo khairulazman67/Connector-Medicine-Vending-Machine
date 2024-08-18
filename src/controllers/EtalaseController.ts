@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { autoInjectable, inject } from "tsyringe";
-import { VMEtalaseService } from "../services/VMEtalaseService";
 import { FormatterResponse } from "../utils/response/formatterResponse";
+import { IEtalaseService } from "../services/EtalaseService/IEtalaseService";
 
 @autoInjectable()
-export class VMEtalaseController {
+export class EtalaseController {
   constructor(
-    @inject(VMEtalaseService)
-    private vmEtalaseService?: VMEtalaseService
+    @inject("IEtalaseService")
+    private vmEtalaseService: IEtalaseService
   ) {}
 
   async getAll(req: Request, res: Response, next: NextFunction) {

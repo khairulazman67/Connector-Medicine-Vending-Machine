@@ -13,49 +13,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TransactionHistoryType {
+  DEBIT //Penambahan stok
+  CREDIT //Pengurangan stok
+}
+
 enum TransactionHistoryStatus {
-  TAMBAH
-  KURANG
-  SO
+  TAKING
+  STOCKOPNAME
+}
+
+enum StockOpnameStatus {
+  OPEN
+  PROCESS
+  COMPLETED
+}
+model Fasyankes{
+  id                  Int         @id @default(autoincrement())
+  fasyankesCode       String      @map("fasyankes_code")         @db.VarChar(10)
+  name                String      @map("name")                   @db.VarChar(100)
+  VendingMachine       VendingMachine[]
 }
 
 model VendingMachine {
   id Int                        @id @default(autoincrement())
   name String                   
-  isPaperlessHospital  Boolean  @default(true) @map("is_paperless_hospital")
-  VmEtalase  VmEtalase[]      
-  vendingMachine  VmTransactionHistory[]
-  VmSetLocation  VmSetLocation[]
+  idFasyankes Int               @map("fasyankes_id")          
+  isPaperlessHospital           Boolean  @default(true) @map("is_paperless_hospital")
+  fasyankes  Fasyankes          @relation(fields: [idFasyankes], references: [id]) 
+  
+  etalase  Etalase[]      
+  vendingMachine  TransactionHistory[]
+  stockOpname StockOpname[]
+  locking Locking[]
 }
 
-model VmEtalase{
+model Etalase{
   id Int                          @id @default(autoincrement())
-  idVm           Int              @map("id_vm")
-  displayCode String              @map("display_code")    
-  itemCode String                 @map("item_code")      
-  medicineName String             @map("medicine_name")   
+  vmId           Int              @map("vm_id") 
+  displayCode String              @map("display_code")   @db.VarChar(10)    
+  itemCode String                 @map("item_code")      @db.VarChar(10)
+  medicineName String             @map("medicine_name")  @db.VarChar(100)
   maxStock Int                    @map("max_stock")       
-  stock Int                       @map("stock")     
-  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
+  stock Int                       @map("stock") 
+   
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id]) 
+  stockOpnameDetail StockOpnameDetail[]
+
+  @@unique([vmId, itemCode]) 
 } 
 
-model VmTransactionHistory{
+model TransactionHistory{
   id    Int                       @id @default(autoincrement())
-  idVm  Int                       @map("id_vm")
-  displayId Int                   @map("display_id")
-  medicineCode String             @map("medicine_code")
-  locationCode String             @map("location_code") //location of medicine release 
+  vmId  Int                       @map("vm_id")
+  displayCode String              @map("display_code")
+  itemCode String                 @map("itemCode") @db.VarChar(10) 
   firstStock Int                  @map("first_stock")
   lastStock Int                   @map("last_stock")
-  note String                     @map("note")
+  createdAt  DateTime             @default(now())
+  transactionType TransactionHistoryType   @map("transaction_type")
   status TransactionHistoryStatus @map("status")
-  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
+  note String                     @map("note")
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
+} 
+model StockOpname{
+  id    Int                       @id @default(autoincrement())
+  soCode String                   @map("so_code") @unique @db.VarChar(15)
+  vmId  Int                       @map("vm_id")
+  note String                     @map("note")
+  soDateTime  DateTime            @default(now()) @map("so_date_time")
+  createdAt  DateTime             @default(now()) @map("created_at")
+  status StockOpnameStatus      
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
+  details StockOpnameDetail[]
+}
+
+model StockOpnameDetail{
+  id    Int                       @id @default(autoincrement())
+  soId Int                        @map("so_id")
+  etalaseId Int                   @map("etalase_id")
+  stock Int                       @map("stock")
+  realStock Int                   @map("real_stock")
+  stockOpname  StockOpname        @relation(fields: [soId], references: [id]) 
+  etalase  Etalase                @relation(fields: [etalaseId], references: [id]) 
 } 
 
-model VmSetLocation{
+model Locking{
   id    Int                       @id @default(autoincrement())
-  idVm  Int                       @map("id_vm") 
-  locationCode String             @map("location_code") 
-  
-  vendingMachine  VendingMachine  @relation(fields: [idVm], references: [id]) // Relation field
-} 
+  vmId  Int                       @map("vm_id") @unique
+  message String
+  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
+}
