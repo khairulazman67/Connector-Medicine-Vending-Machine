@@ -16,9 +16,14 @@ router.post(
 );
 
 router.post(
-  "/process",
+  "/process/:soCode",
   validate(processStockOpnameSchema),
   stockOpnameController.processSO.bind(stockOpnameController)
+);
+
+router.put(
+  "/process-schedule-status",
+  stockOpnameController.processScheduleStatusOpname.bind(stockOpnameController)
 );
 
 export default router;

@@ -9,8 +9,18 @@ import { StockOpnameWhereAnd } from "../../types/stockOpnameType";
 
 export interface IStockOpnameRepository {
   getStockOpname(params: StockOpnameWhereAnd): Promise<StockOpname | null>;
+  getStockOpnames(
+    params: StockOpnameWhereAnd,
+    tx: TxPrismaClient | PrismaClient
+  ): Promise<StockOpname[]>;
   createSO(
     data: Prisma.StockOpnameUncheckedCreateInput,
+    tx: TxPrismaClient | PrismaClient
+  ): Promise<StockOpname>;
+
+  updateSo(
+    data: Prisma.StockOpnameUncheckedUpdateInput,
+    soId: number,
     tx: TxPrismaClient | PrismaClient
   ): Promise<StockOpname>;
 

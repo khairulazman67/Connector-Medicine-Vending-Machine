@@ -19,4 +19,8 @@ export interface StockOpnameType {
 export interface StockOpnameWhereAnd {
   soCode?: string;
   status?: StockOpnameStatus;
+  soDateTime?: {
+    lt: Date;
+    gte: Date;
+  };
 }

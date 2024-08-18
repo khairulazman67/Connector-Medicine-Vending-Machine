@@ -26,4 +26,21 @@ export class StockOpnameController {
       next(error);
     }
   }
+
+  async processScheduleStatusOpname(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    try {
+      res.json(
+        FormatterResponse.success(
+          await this.stockOpnameService.processScheduleStatusOpname(),
+          "SO berhasil di proses"
+        )
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }

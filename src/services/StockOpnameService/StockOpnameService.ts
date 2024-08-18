@@ -11,17 +11,16 @@ import {
   stockOpnameTransactionHistoryDto,
 } from "../../dtos/stockOpname.dto";
 import { prisma } from "../../db";
-import { StockOpnameStatus, TransactionHistoryType } from "@prisma/client";
+import {
+  StockOpname,
+  StockOpnameStatus,
+  TransactionHistoryType,
+} from "@prisma/client";
 import { ITransactionHistoryRepository } from "../../repositories/TransactionHistoryRepository/ITransactionHistoryRepository";
 import { IEtalaseRepository } from "../../repositories/EtalaseRepository/IEtalaseRepository";
-import { empty } from "@prisma/client/runtime/library";
-import { date } from "zod";
-import moment from "moment";
-import {
-  BadRouteError,
-  NotFoundError,
-} from "../../utils/errors/DynamicCustomError";
+import { NotFoundError } from "../../utils/errors/DynamicCustomError";
 import { CustomError } from "../../utils/errors/CustomError";
+import { StockOpnameWhereAnd } from "../../types/stockOpnameType";
 
 @injectable()
 export class StockOpnameService implements IStockOpnameService {
@@ -47,9 +46,47 @@ export class StockOpnameService implements IStockOpnameService {
           ),
           status: StockOpnameStatus.OPEN,
         };
-
-        return await this.stockOpnameRepository.createSO(saveData, tx);
+        const save = await this.stockOpnameRepository.createSO(saveData, tx);
+        return true;
       });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw new NotFoundError(error.message);
+      }
+      throw new Error(`There is an error ${error}`);
+    }
+  }
+
+  async processScheduleStatusOpname(): Promise<StockOpname[]> {
+    try {
+      const now = new Date();
+
+      const result = await prisma.$transaction(async (tx) => {
+        const schedule = await this.stockOpnameRepository.getStockOpnames(
+          {
+            soDateTime: {
+              lt: now,
+            },
+            status: StockOpnameStatus.OPEN,
+          } as StockOpnameWhereAnd,
+          tx
+        );
+
+        console.log(now);
+        console.log("SO DATA : ", schedule);
+
+        if (schedule && schedule.length > 0) {
+          for (const item of schedule) {
+            await this.stockOpnameRepository.updateSo(
+              { status: StockOpnameStatus.PROCESS },
+              item.id,
+              tx
+            );
+          }
+        }
+        return schedule;
+      });
+      return result;
     } catch (error) {
       if (error instanceof CustomError) {
         throw new NotFoundError(error.message);

@@ -25,13 +25,28 @@ export class StockOpnameRepository implements IStockOpnameRepository {
   ): Promise<StockOpname | null> {
     return await prisma.stockOpname.findFirst({
       where: {
-        AND: params,
+        ...params,
       },
       include: {
-        details: true, // Termasuk detail dalam query
+        details: true,
       },
     });
   }
+
+  async getStockOpnames(
+    params: StockOpnameWhereAnd,
+    tx: TxPrismaClient
+  ): Promise<StockOpname[]> {
+    return await tx.stockOpname.findMany({
+      where: {
+        ...params,
+      },
+      include: {
+        details: true,
+      },
+    });
+  }
+
   async processSO(
     data: Prisma.StockOpnameUncheckedCreateInput,
     tx: TxPrismaClient
@@ -49,6 +64,14 @@ export class StockOpnameRepository implements IStockOpnameRepository {
     tx: TxPrismaClient | PrismaClient
   ): Promise<StockOpnameDetail> {
     return tx.stockOpnameDetail.create({ data });
+  }
+
+  async updateSo(
+    data: Prisma.StockOpnameUncheckedUpdateInput,
+    soId: number,
+    tx: TxPrismaClient | PrismaClient
+  ): Promise<StockOpname> {
+    return tx.stockOpname.update({ data, where: { id: soId } });
   }
 
   async generateSoCode(
