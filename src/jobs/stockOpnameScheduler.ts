@@ -28,12 +28,14 @@ export class StockOpnameScheduler {
   }
 
   public start() {
+    console.log("start ", this.job);
     if (this.job) {
       this.job.start();
     }
   }
 
   public stop() {
+    console.log("stop ", this.job);
     if (this.job) {
       this.job.stop();
     }
