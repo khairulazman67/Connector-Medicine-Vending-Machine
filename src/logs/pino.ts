@@ -24,6 +24,20 @@ export const logger = pino({
           ignore: "pid,hostname",
         },
       },
+      ...(process.env.MONGO_LOG_ENABLED === "true"
+        ? [
+            {
+              target: "pino-mongodb",
+              options: {
+                uri: process.env.MONGO_LOG_URL,
+                database: "vending-machine-logs",
+                collection: "logCollection",
+                colorize: true,
+                translateTime: "SYS:yyyy-mm-dd HH:MM:ss.l",
+              },
+            },
+          ]
+        : []),
     ],
   },
 });

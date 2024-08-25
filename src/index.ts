@@ -10,6 +10,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import { container } from "tsyringe";
 import { StockOpnameScheduler } from "./jobs/stockOpnameScheduler";
 import { logger } from "./logs/pino";
+import { pinoHttp } from "pino-http";
 
 const app = express();
 const port = process.env.PORT;
@@ -18,6 +19,10 @@ const port = process.env.PORT;
 app.use(express.json());
 
 // Routes
+if (process.env.HTTP_LOG_ENABLED === "true") {
+  app.use(pinoHttp({ logger }));
+}
+
 app.use("/v1/vm", VendingMachineRoute);
 app.use("/v1/etalase", EtalaseRoute);
 app.use("/v1/transaction", TransactionRoute);
