@@ -30,7 +30,7 @@ export const logger = pino({
               target: "pino-mongodb",
               options: {
                 uri: process.env.MONGO_LOG_URL,
-                database: process.env.MONGO_LOG_DB,
+                database: process.env.MONGO_DB_LOG,
                 collection: "logCollection",
                 colorize: true,
                 translateTime: "SYS:yyyy-mm-dd HH:MM:ss.l",
