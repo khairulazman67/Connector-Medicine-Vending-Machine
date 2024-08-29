@@ -1,0 +1,57 @@
+services:
+  # postgres services
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: dkm_vending_machine
+      POSTGRES_USER: ubuntu
+      POSTGRES_PASSWORD: root
+
+    restart: always
+    volumes:
+      - data_postgres:/var/lib/postgresql/data
+
+  # Mongodb services
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - data_mongo:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ubuntu
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  # Vending app
+  vending_app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: vending_app
+    environment:
+      DATABASE_URL:  ${DATABASE_URL}
+      MONGO_LOG_URL: mongodb://ubuntu:root@mongodb:27017/
+      PORT : 3000
+      NODE_ENV : "development" 
+      STOCK_OPNAME_JOB_ENABLED : false
+      LOG_ENABLED : true
+      MONGO_LOG_ENABLED : true
+      HTTP_LOG_ENABLED : true
+      
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      - postgres
+      - mongodb
+
+    volumes:
+      - .:/usr/app
+volumes:
+  data_postgres:
+  data_mongo:
