@@ -6,9 +6,9 @@ services:
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_DB: dkm_vending_machine
-      POSTGRES_USER: ubuntu
-      POSTGRES_PASSWORD: root
+      POSTGRES_DB:  ${POSTGRES_DB}
+      POSTGRES_USER:  ${POSTGRES_USER}
+      POSTGRES_PASSWORD:  ${POSTGRES_PASSWORD}
 
     restart: always
     volumes:
@@ -24,8 +24,8 @@ services:
     volumes:
       - data_mongo:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ubuntu
-      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
 
   # Vending app
   vending_app:
@@ -35,13 +35,14 @@ services:
     container_name: vending_app
     environment:
       DATABASE_URL:  ${DATABASE_URL}
-      MONGO_LOG_URL: mongodb://ubuntu:root@mongodb:27017/
+      MONGO_LOG_URL: ${MONGO_LOG_URL}
       PORT : 3000
       NODE_ENV : "development" 
       STOCK_OPNAME_JOB_ENABLED : false
       LOG_ENABLED : true
       MONGO_LOG_ENABLED : true
       HTTP_LOG_ENABLED : true
+      MONGO_DB_LOG : ${MONGO_DB_LOG}
       
     ports:
       - "3000:3000"
