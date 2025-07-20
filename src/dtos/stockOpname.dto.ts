@@ -5,7 +5,7 @@ import {
   TransactionHistoryStatus,
   TransactionHistoryType,
 } from "@prisma/client";
-import { processStockOpnamePayload } from "../utils/validations/StockOpnameRequest";
+import { processStockOpnamePayload } from "../utils/validations/stockOpname.request";
 
 export const stockOpnameDtoCreate = async (
   data: processStockOpnamePayload,

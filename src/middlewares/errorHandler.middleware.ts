@@ -1,0 +1,25 @@
+import { Request, Response, NextFunction } from "express";
+import { CustomError } from "../utils/errors/custom.error";
+import { FormatterResponse } from "../utils/response/formatter.response";
+// import { logger } from "../logs/pino";
+export const errorHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.error(err);
+  if (err instanceof CustomError) {
+    return res.status(err.statusCode).send(err.formatErrors());
+  }
+
+  return res
+    .status(400)
+    .send(
+      FormatterResponse.error(
+        "Something went wrong",
+        400,
+        process.env.NODE_ENV === "development" ? err.stack : undefined
+      )
+    );
+};

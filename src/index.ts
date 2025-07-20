@@ -1,19 +1,19 @@
 import "reflect-metadata";
 import express from "express";
 import "./dependencyInjection";
-import VendingMachineRoute from "./routes/VendingMachineRoute";
-import EtalaseRoute from "./routes/EtalaseRoute";
-import TransactionRoute from "./routes/TransactionRoute";
-import StockOpnameRoute from "./routes/StockOpnameRoute";
-import { BadRouteError } from "./utils/errors/DynamicCustomError";
-import { errorHandler } from "./middleware/errorHandler";
+import VendingMachineRoute from "./routes/vendingMachine.route";
+import EtalaseRoute from "./routes/etalase.route";
+import TransactionRoute from "./routes/transaction.route";
+import StockOpnameRoute from "./routes/stockOpname.route";
+import { BadRouteError } from "./utils/errors/dynamicCustom.error";
+import { errorHandler } from "./middlewares/errorHandler.middleware";
 import { container } from "tsyringe";
-import { StockOpnameScheduler } from "./jobs/stockOpnameScheduler";
+import { StockOpnameScheduler } from "./jobs/stockOpname.scheduler";
 import { logger } from "./logs/pino";
 import { pinoHttp } from "pino-http";
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT ?? 3000;
 
 // Middleware
 app.use(express.json());
