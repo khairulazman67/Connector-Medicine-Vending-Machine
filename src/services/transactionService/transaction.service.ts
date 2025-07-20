@@ -1,29 +1,30 @@
-import { inject, injectable } from "tsyringe";
-import { processTransactionPayload } from "../../utils/validations/transaction.request";
-import { prisma } from "../../db";
 import {
-  Prisma,
-  TransactionHistoryType,
   Etalase,
+  Prisma,
   TransactionHistoryStatus,
+  TransactionHistoryType,
 } from "@prisma/client";
-import axios from "axios";
-import { baseAdapter } from "../../utils/adapter/axiosAdapter";
-import { ITransactionService } from "./iTransaction.service";
-import { ITransactionHistoryRepository } from "../../repositories/transactionHistoryRepository/iTransactionHistory.repository";
+import { inject, injectable } from "tsyringe";
+import { prisma } from "../../db";
+import { IVendingMachineIntegration } from "../../integrations/vendingMachine/iVendingMachine.integration";
 import { IEtalaseRepository } from "../../repositories/etalaseRepository/iEtalase.repository";
+import { ITransactionHistoryRepository } from "../../repositories/transactionHistoryRepository/iTransactionHistory.repository";
 import {
   NotFoundError,
   UnprocessableError,
 } from "../../utils/errors/dynamicCustom.error";
+import { processTransactionPayload } from "../../utils/validations/transaction.request";
+import { ITransactionService } from "./iTransaction.service";
 
 @injectable()
 export class TransactionService implements ITransactionService {
   constructor(
     @inject("ITransactionHistoryRepository")
-    private TransactionHistoryRepository: ITransactionHistoryRepository,
+    private transactionHistoryRepository: ITransactionHistoryRepository,
     @inject("IEtalaseRepository")
-    private EtalaseRepository: IEtalaseRepository
+    private etalaseRepository: IEtalaseRepository,
+    @inject("IVendingMachineIntegration")
+    private vendingMachineIntegration: IVendingMachineIntegration
   ) {}
 
   async processTransactionVM(data: processTransactionPayload) {
@@ -41,7 +42,7 @@ export class TransactionService implements ITransactionService {
 
     await prisma.$transaction(async (tx) => {
       for (const item of data.medicine) {
-        const dataEtalase = await this.EtalaseRepository.getByItemVm(
+        const dataEtalase = await this.etalaseRepository.getByItemVm(
           data.vmId,
           item.itemCode
         );
@@ -69,13 +70,13 @@ export class TransactionService implements ITransactionService {
           transactionType: TransactionHistoryType.DEBIT,
         };
 
-        await this.TransactionHistoryRepository.create(transactionSave, tx);
+        await this.transactionHistoryRepository.create(transactionSave, tx);
 
         let etalaseSave: Partial<Etalase> = {
           stock: newStock,
         };
 
-        await this.EtalaseRepository.update(dataEtalase.id, etalaseSave, tx);
+        await this.etalaseRepository.update(dataEtalase.id, etalaseSave, tx);
 
         console.log("dataEtalase ", dataEtalase);
         payloadVM =
@@ -86,21 +87,10 @@ export class TransactionService implements ITransactionService {
           " " +
           item.usageRules;
       }
+
+      await this.vendingMachineIntegration.sendRequest(payloadVM);
     });
 
-    // Buat instance Axios baru menggunakan base adapter
-    const axiosInstance = axios.create({
-      adapter: baseAdapter,
-    });
-
-    // axiosInstance
-    //   .post("/data", payloadVM)
-    //   .then((response) => {
-    //     console.log("Data:", response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
     return payloadVM;
   }
 }

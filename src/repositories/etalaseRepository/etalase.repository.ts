@@ -1,8 +1,7 @@
 import { Etalase, Prisma, PrismaClient } from "@prisma/client";
-import { injectable } from "tsyringe";
 import { prisma, TxPrismaClient } from "../../db";
-import { IEtalaseRepository } from "./iEtalase.repository";
 import { NotFoundError } from "../../utils/errors/dynamicCustom.error";
+import { IEtalaseRepository } from "./iEtalase.repository";
 
 export class EtalaseRepository implements IEtalaseRepository {
   async create(data: Prisma.EtalaseUncheckedCreateInput): Promise<Etalase> {

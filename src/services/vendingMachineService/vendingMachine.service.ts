@@ -1,9 +1,8 @@
-import { injectable, inject } from "tsyringe";
-import { VendingMachineRepository } from "../../repositories/vendingMachineRepository/vendingMachine.repository";
 import { VendingMachine } from "@prisma/client";
+import { inject, injectable } from "tsyringe";
+import { IVendingMachineRepository } from "../../repositories/vendingMachineRepository/iVendingMachine.repository";
 import { VendingMachinePayload } from "../../utils/validations/vendingMachine.request";
 import { IVendingMachineService } from "./iVendingMachine.service";
-import { IVendingMachineRepository } from "../../repositories/vendingMachineRepository/iVendingMachine.repository";
 
 @injectable()
 export class VendingMachineService implements IVendingMachineService {
