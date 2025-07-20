@@ -1,4 +1,4 @@
-# Catalog BE Functional Changelog
+# Connector Medicine Vending Machine
 
 **0.1.1**
 
