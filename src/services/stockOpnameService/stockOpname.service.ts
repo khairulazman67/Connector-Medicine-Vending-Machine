@@ -1,32 +1,27 @@
 import {
-  createStockOpnamePayload,
-  processStockOpnamePayload,
-} from "../../utils/validations/stockOpname.request";
-import { IStockOpnameRepository } from "../../repositories/stockOpnameRepository/iStockOpname.repository";
-import { IStockOpnameService } from "./iStockOpname.service";
-import { inject, injectable } from "tsyringe";
-import * as crypto from "node:crypto";
-import {
-  stockOpnameDetailDtoCreate,
-  stockOpnameDtoCreate,
-  stockOpnameTransactionHistoryDto,
-} from "../../dtos/stockOpname.dto";
-import { prisma } from "../../db";
-import {
   StockOpname,
   StockOpnameStatus,
   TransactionHistoryType,
 } from "@prisma/client";
-import { ITransactionHistoryRepository } from "../../repositories/transactionHistoryRepository/iTransactionHistory.repository";
+import { NextFunction } from "express";
+import { inject, injectable } from "tsyringe";
+import { prisma } from "../../db";
+import { stockOpnameTransactionHistoryDto } from "../../dtos/stockOpname.dto";
 import { IEtalaseRepository } from "../../repositories/etalaseRepository/iEtalase.repository";
+import { ILockingRepository } from "../../repositories/lockingRepository/iLocking.repository";
+import { IStockOpnameRepository } from "../../repositories/stockOpnameRepository/iStockOpname.repository";
+import { ITransactionHistoryRepository } from "../../repositories/transactionHistoryRepository/iTransactionHistory.repository";
+import { StockOpnameWhereAnd } from "../../types/stockOpname.type";
+import { CustomError } from "../../utils/errors/custom.error";
 import {
   NotFoundError,
   UnprocessableError,
 } from "../../utils/errors/dynamicCustom.error";
-import { CustomError } from "../../utils/errors/custom.error";
-import { StockOpnameWhereAnd } from "../../types/stockOpname.type";
-import { ILockingRepository } from "../../repositories/lockingRepository/iLocking.repository";
-import { NextFunction } from "express";
+import {
+  createStockOpnamePayload,
+  processStockOpnamePayload,
+} from "../../utils/validations/stockOpname.request";
+import { IStockOpnameService } from "./iStockOpname.service";
 
 @injectable()
 export class StockOpnameService implements IStockOpnameService {
@@ -82,9 +77,6 @@ export class StockOpnameService implements IStockOpnameService {
           } as StockOpnameWhereAnd,
           tx
         );
-
-        console.log(now);
-        console.log("SO DATA : ", schedule);
 
         if (schedule && schedule.length > 0) {
           for (const item of schedule) {

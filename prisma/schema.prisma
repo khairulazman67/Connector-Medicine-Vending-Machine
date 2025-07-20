@@ -78,7 +78,7 @@ model TransactionHistory{
 } 
 model StockOpname{
   id    Int                       @id @default(autoincrement())
-  soCode String                   @map("so_code") @unique @db.VarChar(15)
+  soCode String                   @map("so_code") @unique @db.VarChar(50)
   vmId  Int                       @map("vm_id")
   note String                     @map("note")
   soDateTime  DateTime            @default(now()) @map("so_date_time")

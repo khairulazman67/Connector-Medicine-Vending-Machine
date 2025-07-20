@@ -17,12 +17,14 @@ import { IStockOpnameRepository } from "./repositories/stockOpnameRepository/iSt
 import { StockOpnameRepository } from "./repositories/stockOpnameRepository/stockOpname.repository";
 import { ILockingRepository } from "./repositories/lockingRepository/iLocking.repository";
 import { LockingRepository } from "./repositories/lockingRepository/locking.repository";
+import { IVendingMachineIntegration } from "./integrations/vendingMachine/iVendingMachine.integration";
+import { VendingMachineIntegration } from "./integrations/vendingMachine/vendingMachine.integration";
 
+/** region services */
 container.registerSingleton<ITransactionService>(
   "ITransactionService",
   TransactionService
 );
-
 container.registerSingleton<IVendingMachineService>(
   "IVendingMachineService",
   VendingMachineService
@@ -34,7 +36,9 @@ container.registerSingleton<IStockOpnameService>(
   "IStockOpnameService",
   StockOpnameService
 );
+/** end region services */
 
+/** region repositories */
 container.registerSingleton<IEtalaseRepository>(
   "IEtalaseRepository",
   EtalaseRepository
@@ -59,3 +63,11 @@ container.registerSingleton<ILockingRepository>(
   "ILockingRepository",
   LockingRepository
 );
+/** end region repositories */
+
+/** region integrations */
+container.registerSingleton<IVendingMachineIntegration>(
+  "IVendingMachineIntegration",
+  VendingMachineIntegration
+);
+/** end region integrations */

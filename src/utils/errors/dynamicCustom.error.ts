@@ -1,5 +1,7 @@
-import { FormatterResponse } from "../response/formatter.response";
-import { formatZodError } from "../response/formatter.response";
+import {
+  FormatterResponse,
+  formatZodError,
+} from "../response/formatter.response";
 import { CustomError } from "./custom.error";
 
 export class DynamicCustomError extends CustomError {
@@ -53,5 +55,11 @@ export class InvalidPayloadError extends DynamicCustomError {
 export class ForbiddenError extends DynamicCustomError {
   constructor(message: string = "") {
     super(message, 403);
+  }
+}
+
+export class BadGateway extends DynamicCustomError {
+  constructor(message: string = "") {
+    super("there is an error: " + message, 502);
   }
 }
