@@ -43,6 +43,9 @@ export const processTransactionSchema = z.object({
       row3: z.string({
         invalid_type_error: "row3 id harus berupa string",
       }),
+       row4: z.string({
+        invalid_type_error: "row4 id harus berupa string",
+      }),
     })
     .optional(),
 });

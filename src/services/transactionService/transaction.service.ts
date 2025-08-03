@@ -32,12 +32,14 @@ export class TransactionService implements ITransactionService {
     if (data.headerPrint) {
       payloadVM =
         payloadVM +
-        "pd1_" +
+        " pd0_" +
         data.headerPrint.row1 +
-        "pd2_" +
-        data.headerPrint.row2 +
-        "pd2_" +
-        data.headerPrint.row2;
+        " pd1_" +
+         data.headerPrint.row2 + 
+        " pd2_" +
+        data.headerPrint.row3 +
+        " pd3_";
+        data.headerPrint.row4;
     }
 
     await prisma.$transaction(async (tx) => {
@@ -79,17 +81,23 @@ export class TransactionService implements ITransactionService {
         await this.etalaseRepository.update(dataEtalase.id, etalaseSave, tx);
 
         console.log("dataEtalase ", dataEtalase);
-        payloadVM =
+
+
+        for( let i =0; i<item.amount;i++){
+          payloadVM =
           payloadVM +
-          "pn_" +
+          " pn_" +
           dataEtalase.displayCode +
           dataEtalase.medicineName +
           " " +
-          item.usageRules;
+          item.usageRules+' pz'
+        }
+         
       }
-
-      await this.vendingMachineIntegration.sendRequest(payloadVM);
     });
+
+
+     await this.vendingMachineIntegration.sendRequest(payloadVM);
 
     return payloadVM;
   }
