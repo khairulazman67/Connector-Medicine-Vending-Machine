@@ -88,7 +88,8 @@ export class TransactionService implements ITransactionService {
             dataEtalase.displayCode +
             dataEtalase.medicineName +
             " " +
-            item.usageRules;
+            item.usageRules +
+            " pz";
         }
       }
 
