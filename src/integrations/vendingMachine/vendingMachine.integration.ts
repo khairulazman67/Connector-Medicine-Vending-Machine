@@ -10,11 +10,12 @@ export class VendingMachineIntegration implements IVendingMachineIntegration {
     });
 
     await axiosInstance
-      .post("/data", message)
+      .post("http://192.168.1.3:8410/data", message)
       .then((response) => {
         console.log("Data:", response.data);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log('ini errornya ',err)
         throw new BadGateway("send request to vending machine");
       });
   }

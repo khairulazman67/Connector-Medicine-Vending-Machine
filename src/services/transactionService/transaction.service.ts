@@ -35,10 +35,10 @@ export class TransactionService implements ITransactionService {
         " pd0_" +
         data.headerPrint.row1 +
         " pd1_" +
-        data.headerPrint.row2 +
+         data.headerPrint.row2 + 
         " pd2_" +
         data.headerPrint.row3 +
-        " pd3_" +
+        " pd3_";
         data.headerPrint.row4;
     }
 
@@ -81,6 +81,7 @@ export class TransactionService implements ITransactionService {
         await this.etalaseRepository.update(dataEtalase.id, etalaseSave, tx);
 
         console.log("dataEtalase ", dataEtalase);
+<<<<<<< HEAD
         for (let i = 0; i < 0; i++) {
           payloadVM =
             payloadVM +
@@ -91,10 +92,25 @@ export class TransactionService implements ITransactionService {
             item.usageRules +
             " pz";
         }
-      }
+=======
 
-      await this.vendingMachineIntegration.sendRequest(payloadVM);
+
+        for( let i =0; i<item.amount;i++){
+          payloadVM =
+          payloadVM +
+          " pn_" +
+          dataEtalase.displayCode +
+          dataEtalase.medicineName +
+          " " +
+          item.usageRules+' pz'
+        }
+         
+>>>>>>> f387dbb6863d48f4dd4641e8df4a1bd95a358767
+      }
     });
+
+
+     await this.vendingMachineIntegration.sendRequest(payloadVM);
 
     return payloadVM;
   }
