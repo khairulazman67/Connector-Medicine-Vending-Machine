@@ -5,7 +5,7 @@ export const processTransactionSchema = z.object({
     required_error: "vmId wajib diisi",
     invalid_type_error: "vmId harus berupa number",
   }),
-  
+
   locationCode: z.string({
     required_error: "locationCode id wajib diisi",
     invalid_type_error: "locationCode id harus berupa string",
@@ -42,6 +42,9 @@ export const processTransactionSchema = z.object({
       }),
       row3: z.string({
         invalid_type_error: "row3 id harus berupa string",
+      }),
+      row4: z.string({
+        invalid_type_error: "row4 id harus berupa string",
       }),
     })
     .optional(),

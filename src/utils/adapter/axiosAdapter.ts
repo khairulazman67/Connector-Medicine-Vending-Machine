@@ -7,7 +7,7 @@ export const baseAdapter = async (
   // Modifikasi konfigurasi permintaan jika diperlukan
   config.headers = {
     ...config.headers,
-    "X-Custom-Header": "CustomHeaderValue",
+    "Content-Type": "text/plain",
   };
 
   // Logging request details
