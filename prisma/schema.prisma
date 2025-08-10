@@ -30,22 +30,22 @@ enum StockOpnameStatus {
 }
 model Fasyankes{
   id                  Int         @id @default(autoincrement())
-  fasyankesCode       String      @map("fasyankes_code")         @db.VarChar(10)
+  fasyankesCode       String      @map("fasyankes_code")         @db.VarChar(10) @unique
   name                String      @map("name")                   @db.VarChar(100)
-  VendingMachine       VendingMachine[]
+  VendingMachines       VendingMachine[]
 }
 
 model VendingMachine {
   id Int                        @id @default(autoincrement())
   name String                   
-  idFasyankes Int               @map("fasyankes_id")          
+  fasyankesId Int               @map("fasyankes_id")
   isPaperlessHospital           Boolean  @default(true) @map("is_paperless_hospital")
-  fasyankes  Fasyankes          @relation(fields: [idFasyankes], references: [id]) 
+  fasyankes  Fasyankes          @relation(fields: [fasyankesId], references: [id]) 
   
-  etalase  Etalase[]      
-  vendingMachine  TransactionHistory[]
-  stockOpname StockOpname[]
-  locking Locking[]
+  etalases  Etalase[]      
+  transactionHistories  TransactionHistory[]
+  stockOpnames StockOpname[]
+  lockings Locking[]
 }
 
 model Etalase{
@@ -57,8 +57,8 @@ model Etalase{
   maxStock Int                    @map("max_stock")       
   stock Int                       @map("stock") 
    
-  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id]) 
-  stockOpnameDetail StockOpnameDetail[]
+  vendingMachine          VendingMachine  @relation(fields: [vmId], references: [id]) 
+  stockOpnameDetails StockOpnameDetail[]
 
   @@unique([vmId, itemCode]) 
 } 
@@ -74,7 +74,7 @@ model TransactionHistory{
   transactionType TransactionHistoryType   @map("transaction_type")
   status TransactionHistoryStatus @map("status")
   note String                     @map("note")
-  vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
+  vendingMachines  VendingMachine  @relation(fields: [vmId], references: [id])
 } 
 model StockOpname{
   id    Int                       @id @default(autoincrement())

@@ -1,8 +1,8 @@
-import { PrismaClient, VendingMachine, Prisma } from "@prisma/client";
+import { VendingMachine } from "@prisma/client";
 import { injectable } from "tsyringe";
 import { prisma } from "../../db";
-import { VendingMachinePayload } from "../../utils/validations/vendingMachine.request";
 import { NotFoundError } from "../../utils/errors/dynamicCustom.error";
+import { VendingMachinePayload } from "../../utils/validations/vendingMachine.request";
 
 @injectable()
 export class VendingMachineRepository {
@@ -16,6 +16,16 @@ export class VendingMachineRepository {
     });
     if (!getDataById) throw new NotFoundError(`Vending machine with id ${id}`);
     return getDataById;
+  }
+
+  async getByFasyankesCode(fasyankesCode: string): Promise<VendingMachine[]> {
+    return await prisma.vendingMachine.findMany({
+      where: {
+        fasyankes: {
+          fasyankesCode: fasyankesCode,
+        },
+      },
+    });
   }
 
   async create(data: VendingMachinePayload): Promise<VendingMachine> {

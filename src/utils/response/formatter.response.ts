@@ -4,9 +4,9 @@ interface errorMessages {
   [key: string]: string;
 }
 export class FormatterResponse {
-  static success<T>(data?: T, message: string = "Operation successful") {
+  static success<T>(data?: T, message: string = "Successful") {
     return {
-      status: "success",
+      isSuccess: true,
       code: 200,
       message,
       ...(data && { data }),
@@ -26,7 +26,7 @@ export class FormatterResponse {
         message = message;
     }
     return {
-      status: "error",
+      isSuccess: false,
       code,
       message,
       data,

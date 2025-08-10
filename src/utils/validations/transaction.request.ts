@@ -5,11 +5,6 @@ export const processTransactionSchema = z.object({
     required_error: "vmId wajib diisi",
     invalid_type_error: "vmId harus berupa number",
   }),
-
-  locationCode: z.string({
-    required_error: "locationCode id wajib diisi",
-    invalid_type_error: "locationCode id harus berupa string",
-  }),
   barcode: z.string({
     required_error: "barcode id wajib diisi",
     invalid_type_error: "barcode id harus berupa string",

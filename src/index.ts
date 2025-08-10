@@ -1,16 +1,17 @@
-import "reflect-metadata";
 import express from "express";
-import "./dependencyInjection";
-import VendingMachineRoute from "./routes/vendingMachine.route";
-import EtalaseRoute from "./routes/etalase.route";
-import TransactionRoute from "./routes/transaction.route";
-import StockOpnameRoute from "./routes/stockOpname.route";
-import { BadRouteError } from "./utils/errors/dynamicCustom.error";
-import { errorHandler } from "./middlewares/errorHandler.middleware";
+import { pinoHttp } from "pino-http";
+import "reflect-metadata";
 import { container } from "tsyringe";
+import "./dependencyInjection";
 import { StockOpnameScheduler } from "./jobs/stockOpname.scheduler";
 import { logger } from "./logs/pino";
-import { pinoHttp } from "pino-http";
+import { errorHandler } from "./middlewares/errorHandler.middleware";
+import EtalaseRoute from "./routes/etalase.route";
+import FasyankesRoute from "./routes/fasyankes.route";
+import StockOpnameRoute from "./routes/stockOpname.route";
+import TransactionRoute from "./routes/transaction.route";
+import VendingMachineRoute from "./routes/vendingMachine.route";
+import { BadRouteError } from "./utils/errors/dynamicCustom.error";
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -23,10 +24,11 @@ if (process.env.HTTP_LOG_ENABLED === "true") {
   app.use(pinoHttp({ logger }));
 }
 
-app.use("/v1/vm", VendingMachineRoute);
-app.use("/v1/etalase", EtalaseRoute);
-app.use("/v1/transaction", TransactionRoute);
-app.use("/v1/stock-opname", StockOpnameRoute);
+app.use(`/vm`, VendingMachineRoute);
+app.use(`/etalase`, EtalaseRoute);
+app.use(`/transaction`, TransactionRoute);
+app.use(`/stock-opname`, StockOpnameRoute);
+app.use(`/fasyankes`, FasyankesRoute);
 
 app.all("/*", () => {
   throw new BadRouteError();

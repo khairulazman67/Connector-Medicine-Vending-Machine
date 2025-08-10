@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { autoInjectable, inject } from "tsyringe";
-import { FormatterResponse } from "../utils/response/formatter.response";
 import { IVendingMachineService } from "../services/vendingMachineService/iVendingMachine.service";
+import { FormatterResponse } from "../utils/response/formatter.response";
 
 @autoInjectable()
 export class VendingMachineController {
@@ -12,14 +12,25 @@ export class VendingMachineController {
 
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const machines =
-        await this.vendingMachineService?.getAllVendingMachines();
+      const machines = await this.vendingMachineService.getAllVendingMachines();
       res.json(
         FormatterResponse.success(
           machines,
           "Data vending machine berhasil disimpan"
         )
       );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getVmForMyFasyankes(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { fasyankesCode } = req.params;
+      const machines = await this.vendingMachineService.getVmForMyFasyankes(
+        fasyankesCode
+      );
+      res.json(FormatterResponse.success(machines));
     } catch (error) {
       next(error);
     }

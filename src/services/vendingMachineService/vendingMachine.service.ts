@@ -15,6 +15,12 @@ export class VendingMachineService implements IVendingMachineService {
     return this.vendingMachineRepository.getAll();
   }
 
+  async getVmForMyFasyankes(fasyankesCode: string): Promise<VendingMachine[]> {
+    return await this.vendingMachineRepository.getByFasyankesCode(
+      fasyankesCode
+    );
+  }
+
   async getVendingMachineById(id: number) {
     return this.vendingMachineRepository.getById(id);
   }
