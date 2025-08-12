@@ -1,5 +1,9 @@
 # Connector Medicine Vending Machine
 
+**0.1.3**
+
+- [feat] adjust fasyankes and get my vm
+
 **0.1.2**
 
 - [feat] adding feature get my vm by fasyankes code

@@ -25,7 +25,6 @@ router.post(
 );
 router.put(
   "/:id",
-  validate(vendingMachineSchema),
   vendingMachineController.update.bind(vendingMachineController)
 );
 router.delete(

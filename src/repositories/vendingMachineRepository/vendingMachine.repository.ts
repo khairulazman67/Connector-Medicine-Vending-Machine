@@ -25,6 +25,9 @@ export class VendingMachineRepository {
           fasyankesCode: fasyankesCode,
         },
       },
+      orderBy: {
+        id: "asc",
+      },
     });
   }
 

@@ -1,5 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IFasyankesRepository } from "../../repositories/fasyankesRepository/iFasyankes.repository";
+import { NotFoundError } from "../../utils/errors/dynamicCustom.error";
 import { IFasyankesService } from "./iFasyankes.service";
 
 @injectable()
@@ -10,6 +11,14 @@ export class FasyankesService implements IFasyankesService {
   ) {}
 
   async getFasyankesByFasyankesCode(fasyankesCode: string) {
-    return this.iFasyankesRepository.getByFasyankesCode(fasyankesCode);
+    const fasyankes = await this.iFasyankesRepository.getByFasyankesCode(
+      fasyankesCode
+    );
+
+    if (fasyankes === null) {
+      throw new NotFoundError("Fasyankes belum terdaftar pada vending machine");
+    }
+
+    return fasyankes;
   }
 }

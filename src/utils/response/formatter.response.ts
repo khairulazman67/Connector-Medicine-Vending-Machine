@@ -19,12 +19,7 @@ export class FormatterResponse {
     stack?: string,
     data?: any
   ) {
-    switch (code) {
-      case 404:
-        message = message + " tidak ditemukan";
-      default:
-        message = message;
-    }
+    message = message + ".";
     return {
       isSuccess: false,
       code,
