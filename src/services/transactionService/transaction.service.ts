@@ -80,8 +80,6 @@ export class TransactionService implements ITransactionService {
 
         await this.etalaseRepository.update(dataEtalase.id, etalaseSave, tx);
 
-        console.log("dataEtalase ", dataEtalase);
-
         for (let i = 0; i < item.amount; i++) {
           payloadVM =
             payloadVM +
@@ -95,7 +93,7 @@ export class TransactionService implements ITransactionService {
       }
     });
 
-    await this.vendingMachineIntegration.sendRequest(payloadVM);
+    // await this.vendingMachineIntegration.sendRequest(payloadVM);
 
     return payloadVM;
   }

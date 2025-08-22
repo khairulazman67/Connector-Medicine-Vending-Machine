@@ -19,6 +19,8 @@ import { FasyankesService } from "./services/fasyankesService/fasyankes.service"
 import { IFasyankesService } from "./services/fasyankesService/iFasyankes.service";
 import { IStockOpnameService } from "./services/stockOpnameService/iStockOpname.service";
 import { StockOpnameService } from "./services/stockOpnameService/stockOpname.service";
+import { ITransactionHistoryService } from "./services/transactionHistoryService/iTransactionHistory.service";
+import { TransactionHistoryService } from "./services/transactionHistoryService/transactionHistory.service";
 import { ITransactionService } from "./services/transactionService/iTransaction.service";
 import { TransactionService } from "./services/transactionService/transaction.service";
 import { IVendingMachineService } from "./services/vendingMachineService/iVendingMachine.service";
@@ -42,6 +44,11 @@ container.registerSingleton<IStockOpnameService>(
 container.registerSingleton<IFasyankesService>(
   "IFasyankesService",
   FasyankesService
+);
+
+container.registerSingleton<ITransactionHistoryService>(
+  "ITransactionHistoryService",
+  TransactionHistoryService
 );
 
 // #endregion services

@@ -10,6 +10,7 @@ import EtalaseRoute from "./routes/etalase.route";
 import FasyankesRoute from "./routes/fasyankes.route";
 import StockOpnameRoute from "./routes/stockOpname.route";
 import TransactionRoute from "./routes/transaction.route";
+import TransactionHistory from "./routes/transactionHistory.route";
 import VendingMachineRoute from "./routes/vendingMachine.route";
 import { BadRouteError } from "./utils/errors/dynamicCustom.error";
 
@@ -29,6 +30,7 @@ app.use(`/etalase`, EtalaseRoute);
 app.use(`/transaction`, TransactionRoute);
 app.use(`/stock-opname`, StockOpnameRoute);
 app.use(`/fasyankes`, FasyankesRoute);
+app.use(`/transaction-history`, TransactionHistory);
 
 app.all("/*", () => {
   throw new BadRouteError();

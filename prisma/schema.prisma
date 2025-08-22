@@ -29,9 +29,10 @@ enum StockOpnameStatus {
   COMPLETED
 }
 model Fasyankes{
-  id                  Int         @id @default(autoincrement())
-  fasyankesCode       String      @map("fasyankes_code")         @db.VarChar(10) @unique
-  name                String      @map("name")                   @db.VarChar(100)
+  id                  Int       @id @default(autoincrement())
+  fasyankesCode       String    @map("fasyankes_code")         @db.VarChar(10) @unique
+  name                String    @map("name")                   @db.VarChar(100)
+
   VendingMachines       VendingMachine[]
 }
 
@@ -57,7 +58,7 @@ model Etalase{
   maxStock Int                    @map("max_stock")       
   stock Int                       @map("stock") 
    
-  vendingMachine          VendingMachine  @relation(fields: [vmId], references: [id]) 
+  vendingMachine VendingMachine @relation(fields: [vmId], references: [id]) 
   stockOpnameDetails StockOpnameDetail[]
 
   @@unique([vmId, itemCode]) 
@@ -71,10 +72,11 @@ model TransactionHistory{
   firstStock Int                  @map("first_stock")
   lastStock Int                   @map("last_stock")
   createdAt  DateTime             @default(now())
+  note String                     @map("note")
+
   transactionType TransactionHistoryType   @map("transaction_type")
   status TransactionHistoryStatus @map("status")
-  note String                     @map("note")
-  vendingMachines  VendingMachine  @relation(fields: [vmId], references: [id])
+  vendingMachines  VendingMachine @relation(fields: [vmId], references: [id])
 } 
 model StockOpname{
   id    Int                       @id @default(autoincrement())
@@ -83,6 +85,7 @@ model StockOpname{
   note String                     @map("note")
   soDateTime  DateTime            @default(now()) @map("so_date_time")
   createdAt  DateTime             @default(now()) @map("created_at")
+
   status StockOpnameStatus      
   vendingMachine  VendingMachine  @relation(fields: [vmId], references: [id])
   details StockOpnameDetail[]
@@ -94,6 +97,7 @@ model StockOpnameDetail{
   etalaseId Int                   @map("etalase_id")
   stock Int                       @map("stock")
   realStock Int                   @map("real_stock")
+
   stockOpname  StockOpname        @relation(fields: [soId], references: [id]) 
   etalase  Etalase                @relation(fields: [etalaseId], references: [id]) 
 } 
