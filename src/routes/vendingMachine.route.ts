@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { container } from "tsyringe";
+import { VendingMachineController } from "../controllers/vendingMachine.controller";
 import validate from "../middlewares/payloadValidation.middleware";
 import { vendingMachineSchema } from "../utils/validations/vendingMachine.request";
-import { VendingMachineController } from "../controllers/vendingMachine.controller";
 
 const router = Router();
 const vendingMachineController = container.resolve(VendingMachineController);
@@ -12,6 +12,12 @@ router.get(
   "/:id",
   vendingMachineController.getById.bind(vendingMachineController)
 );
+
+router.get(
+  "/get-my-vm/:fasyankesCode",
+  vendingMachineController.getVmForMyFasyankes.bind(vendingMachineController)
+);
+
 router.post(
   "/",
   validate(vendingMachineSchema),
@@ -19,7 +25,6 @@ router.post(
 );
 router.put(
   "/:id",
-  validate(vendingMachineSchema),
   vendingMachineController.update.bind(vendingMachineController)
 );
 router.delete(

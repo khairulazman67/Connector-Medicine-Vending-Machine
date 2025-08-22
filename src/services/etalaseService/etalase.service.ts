@@ -1,7 +1,7 @@
-import { injectable, inject } from "tsyringe";
-import { EtalaseCreatePayload } from "../../utils/validations/etalase.request";
 import { Etalase } from "@prisma/client";
+import { inject, injectable } from "tsyringe";
 import { IEtalaseRepository } from "../../repositories/etalaseRepository/iEtalase.repository";
+import { EtalaseCreatePayload } from "../../utils/validations/etalase.request";
 import { IEtalaseService } from "./iEtalase.service";
 
 @injectable()

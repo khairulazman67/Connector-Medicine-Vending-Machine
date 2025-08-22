@@ -3,6 +3,7 @@ import { VendingMachinePayload } from "../../utils/validations/vendingMachine.re
 
 export interface IVendingMachineRepository {
   getAll(): Promise<VendingMachine[]>;
+  getByFasyankesCode(fasyankesCode: string): Promise<VendingMachine[]>;
 
   getById(id: number): Promise<VendingMachine | null>;
 

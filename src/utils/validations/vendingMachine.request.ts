@@ -7,7 +7,7 @@ export const vendingMachineSchema = z.object({
       invalid_type_error: "Name harus berupa string",
     })
     .min(1),
-  idFasyankes: z
+  fasyankesId: z
     .number({
       required_error: "idFasyankes tidak boleh kosong",
       invalid_type_error: "idFasyankes harus berupa number",

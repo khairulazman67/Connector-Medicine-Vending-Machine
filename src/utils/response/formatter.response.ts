@@ -4,9 +4,9 @@ interface errorMessages {
   [key: string]: string;
 }
 export class FormatterResponse {
-  static success<T>(data?: T, message: string = "Operation successful") {
+  static success<T>(data?: T, message: string = "Successful") {
     return {
-      status: "success",
+      isSuccess: true,
       code: 200,
       message,
       ...(data && { data }),
@@ -19,14 +19,9 @@ export class FormatterResponse {
     stack?: string,
     data?: any
   ) {
-    switch (code) {
-      case 404:
-        message = message + " tidak ditemukan";
-      default:
-        message = message;
-    }
+    message = message + ".";
     return {
-      status: "error",
+      isSuccess: false,
       code,
       message,
       data,

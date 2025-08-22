@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, TransactionHistory } from "@prisma/client";
+import { Prisma, TransactionHistory } from "@prisma/client";
 import { TxPrismaClient } from "../../db";
 
 export interface ITransactionHistoryRepository {
@@ -6,4 +6,9 @@ export interface ITransactionHistoryRepository {
     data: Prisma.TransactionHistoryUncheckedCreateInput,
     tx: TxPrismaClient
   ): Promise<TransactionHistory>;
+
+  getAllByVmId(
+    vmId: number,
+    tx?: TxPrismaClient
+  ): Promise<TransactionHistory[]>;
 }
