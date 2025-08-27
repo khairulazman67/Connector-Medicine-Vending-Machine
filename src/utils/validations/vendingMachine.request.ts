@@ -7,6 +7,10 @@ export const vendingMachineSchema = z.object({
       invalid_type_error: "Name harus berupa string",
     })
     .min(1),
+  url: z.string({
+    required_error: "Url tidak boleh kosong",
+    invalid_type_error: "url harus berupa string",
+  }),
   fasyankesId: z
     .number({
       required_error: "idFasyankes tidak boleh kosong",

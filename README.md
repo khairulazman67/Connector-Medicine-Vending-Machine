@@ -1,5 +1,9 @@
 # Connector Medicine Vending Machine
 
+**0.1.4**
+
+- [feat] add payload url for save vending machine url
+
 **0.1.3**
 
 - [feat] adjust fasyankes and get my vm
