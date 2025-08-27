@@ -9,6 +9,7 @@ import { prisma } from "../../db";
 import { IVendingMachineIntegration } from "../../integrations/vendingMachine/iVendingMachine.integration";
 import { IEtalaseRepository } from "../../repositories/etalaseRepository/iEtalase.repository";
 import { ITransactionHistoryRepository } from "../../repositories/transactionHistoryRepository/iTransactionHistory.repository";
+import { IVendingMachineRepository } from "../../repositories/vendingMachineRepository/iVendingMachine.repository";
 import {
   NotFoundError,
   UnprocessableError,
@@ -24,77 +25,89 @@ export class TransactionService implements ITransactionService {
     @inject("IEtalaseRepository")
     private etalaseRepository: IEtalaseRepository,
     @inject("IVendingMachineIntegration")
-    private vendingMachineIntegration: IVendingMachineIntegration
+    private vendingMachineIntegration: IVendingMachineIntegration,
+    @inject("IVendingMachineRepository")
+    private vendingMachineRepository: IVendingMachineRepository
   ) {}
 
   async processTransactionVM(data: processTransactionPayload) {
-    let payloadVM: string = "p1" + data.barcode;
-    if (data.headerPrint) {
-      payloadVM =
-        payloadVM +
-        " pd0_" +
-        data.headerPrint.row1 +
-        " pd1_" +
-        data.headerPrint.row2 +
-        " pd2_" +
-        data.headerPrint.row3 +
-        " pd3_";
-      data.headerPrint.row4;
-    }
-
-    await prisma.$transaction(async (tx) => {
-      for (const item of data.medicine) {
-        const dataEtalase = await this.etalaseRepository.getByItemVm(
-          data.vmId,
-          item.itemCode
-        );
-
-        if (!dataEtalase) {
-          throw new NotFoundError(
-            `Etalase vending machine ${data.vmId} dan kode obat ${item.itemCode}`
-          );
-        }
-
-        const newStock = dataEtalase?.stock - item.amount;
-        if (newStock <= 0)
-          throw new UnprocessableError(
-            `Stok vending machine ${data.vmId} dan kode obat ${item.itemCode} tidak mencukupi`
-          );
-
-        const transactionSave: Prisma.TransactionHistoryUncheckedCreateInput = {
-          vmId: data.vmId,
-          displayCode: dataEtalase?.displayCode,
-          itemCode: item.itemCode,
-          firstStock: dataEtalase?.stock,
-          lastStock: newStock,
-          note: `Pengambilan obat pada VM ${data.vmId}`,
-          status: TransactionHistoryStatus.TAKING,
-          transactionType: TransactionHistoryType.DEBIT,
-        };
-
-        await this.transactionHistoryRepository.create(transactionSave, tx);
-
-        let etalaseSave: Partial<Etalase> = {
-          stock: newStock,
-        };
-
-        await this.etalaseRepository.update(dataEtalase.id, etalaseSave, tx);
-
-        for (let i = 0; i < item.amount; i++) {
-          payloadVM =
-            payloadVM +
-            " pn_" +
-            dataEtalase.displayCode +
-            dataEtalase.medicineName +
-            " " +
-            item.usageRules +
-            " pz";
-        }
+    try {
+      const vm = await this.vendingMachineRepository.getById(data.vmId);
+      if (vm == null) {
+        throw new NotFoundError("Vending machine is not found");
       }
-    });
 
-    // await this.vendingMachineIntegration.sendRequest(payloadVM);
+      let payloadVM: string = "p1" + data.barcode;
+      if (data.headerPrint) {
+        payloadVM =
+          payloadVM +
+          " pd0_" +
+          data.headerPrint.row1 +
+          " pd1_" +
+          data.headerPrint.row2 +
+          " pd2_" +
+          data.headerPrint.row3 +
+          " pd3_";
+        data.headerPrint.row4;
+      }
 
-    return payloadVM;
+      await prisma.$transaction(async (tx) => {
+        for (const item of data.medicine) {
+          const dataEtalase = await this.etalaseRepository.getByItemVm(
+            data.vmId,
+            item.itemCode
+          );
+
+          if (!dataEtalase) {
+            throw new NotFoundError(
+              `Etalase vending machine ${data.vmId} dan kode obat ${item.itemCode}`
+            );
+          }
+
+          const newStock = dataEtalase?.stock - item.amount;
+          if (newStock <= 0)
+            throw new UnprocessableError(
+              `Stok vending machine ${data.vmId} dan kode obat ${item.itemCode} tidak mencukupi`
+            );
+
+          const transactionSave: Prisma.TransactionHistoryUncheckedCreateInput =
+            {
+              vmId: data.vmId,
+              displayCode: dataEtalase?.displayCode,
+              itemCode: item.itemCode,
+              firstStock: dataEtalase?.stock,
+              lastStock: newStock,
+              note: `Pengambilan obat pada VM ${data.vmId}`,
+              status: TransactionHistoryStatus.TAKING,
+              transactionType: TransactionHistoryType.DEBIT,
+            };
+
+          await this.transactionHistoryRepository.create(transactionSave, tx);
+
+          let etalaseSave: Partial<Etalase> = {
+            stock: newStock,
+          };
+
+          await this.etalaseRepository.update(dataEtalase.id, etalaseSave, tx);
+
+          for (let i = 0; i < item.amount; i++) {
+            payloadVM =
+              payloadVM +
+              " pn_" +
+              dataEtalase.displayCode +
+              dataEtalase.medicineName +
+              " " +
+              item.usageRules +
+              " pz";
+          }
+        }
+      });
+
+      await this.vendingMachineIntegration.sendRequest(vm.url, payloadVM);
+
+      return payloadVM;
+    } catch (error) {
+      throw new Error(`There is an error ${error}`);
+    }
   }
 }
