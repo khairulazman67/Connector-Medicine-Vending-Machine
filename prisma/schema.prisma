@@ -55,7 +55,7 @@ model Etalase{
   vmId           Int              @map("vm_id") 
   displayCode String              @map("display_code")   @db.VarChar(10)    
   itemCode String                 @map("item_code")      @db.VarChar(10)
-  medicineName String             @map("medicine_name")  @db.VarChar(100)
+  medicineName String             @map("medicine_name")
   maxStock Int                    @map("max_stock")       
   stock Int                       @map("stock") 
    
