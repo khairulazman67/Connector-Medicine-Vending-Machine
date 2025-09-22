@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { autoInjectable, inject } from "tsyringe";
-import { FormatterResponse } from "../utils/response/formatter.response";
 import { IEtalaseService } from "../services/etalaseService/iEtalase.service";
+import { FormatterResponse } from "../utils/response/formatter.response";
 
 @autoInjectable()
 export class EtalaseController {
@@ -50,11 +50,11 @@ export class EtalaseController {
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-
       const machine = await this.vmEtalaseService?.updateVMEtalase(
         parseInt(id),
         req.body
       );
+
       res.json(
         FormatterResponse.success(
           machine,

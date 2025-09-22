@@ -1,12 +1,11 @@
 import { Etalase, Prisma, PrismaClient } from "@prisma/client";
-import { injectable } from "tsyringe";
-import { prisma, TxPrismaClient } from "../../db";
+import { TxPrismaClient } from "../../db";
 
 export interface IEtalaseRepository {
   create(data: Prisma.EtalaseUncheckedCreateInput): Promise<Etalase>;
   update(
     id: number,
-    data: Partial<Etalase>,
+    data: Prisma.EtalaseUpdateInput,
     tx?: TxPrismaClient | PrismaClient
   ): Promise<any>;
   getAll(): Promise<Etalase[]>;

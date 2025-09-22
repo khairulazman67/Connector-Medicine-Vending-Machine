@@ -30,26 +30,32 @@ export const EtalaseCreateSchema = z.object({
 });
 
 export const EtalaseUpdateSchema = z.object({
-  vmId: z.number({
-    invalid_type_error: "vmId harus berupa number",
-  }),
-  displayCode: z.string({
-    invalid_type_error: "displayCode harus berupa string",
-  }),
-  itemCode: z.string({
-    invalid_type_error: "itemCode harus berupa string",
-  }),
+  displayCode: z
+    .string({
+      invalid_type_error: "displayCode harus berupa string",
+    })
+    .optional(),
+  itemCode: z
+    .string({
+      invalid_type_error: "itemCode harus berupa string",
+    })
+    .optional(),
   medicineName: z
     .string({
       invalid_type_error: "medicineName harus berupa string",
     })
-    .min(1),
-  maxStock: z.number({
-    invalid_type_error: "maxStock harus berupa number",
-  }),
-  stock: z.number({
-    invalid_type_error: "stock harus berupa number",
-  }),
+    .min(1)
+    .optional(),
+  maxStock: z
+    .number({
+      invalid_type_error: "maxStock harus berupa number",
+    })
+    .optional(),
+  stock: z
+    .number({
+      invalid_type_error: "stock harus berupa number",
+    })
+    .optional(),
 });
 
 export type EtalaseCreatePayload = z.infer<typeof EtalaseCreateSchema>;

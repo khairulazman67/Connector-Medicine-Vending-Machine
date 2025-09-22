@@ -1,6 +1,7 @@
-import { Etalase } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { inject, injectable } from "tsyringe";
 import { IEtalaseRepository } from "../../repositories/etalaseRepository/iEtalase.repository";
+import { NotFoundError } from "../../utils/errors/dynamicCustom.error";
 import { EtalaseCreatePayload } from "../../utils/validations/etalase.request";
 import { IEtalaseService } from "./iEtalase.service";
 
@@ -19,13 +20,34 @@ export class EtalaseService implements IEtalaseService {
     return this.etalaseRepository.getAll();
   }
 
-  async updateVMEtalase(id: number, data: Partial<Etalase>) {
-    await this.getVMEtalaseById(id);
-    return this.etalaseRepository.update(id, data);
+  async updateVMEtalase(id: number, data: Prisma.EtalaseUpdateInput) {
+    const etalase = await this.etalaseRepository.getById(id);
+
+    if (etalase === null) {
+      throw new NotFoundError(
+        `Vending machine etalase with id ${id} is not found`
+      );
+    }
+
+    const dataSave: Prisma.EtalaseUpdateInput = {
+      displayCode: data.displayCode ?? etalase.displayCode,
+      itemCode: data.itemCode ?? etalase.itemCode,
+      medicineName: data.medicineName ?? etalase.medicineName,
+      maxStock: data.maxStock ?? etalase.maxStock,
+      stock: data.stock ?? etalase.stock,
+    };
+
+    return this.etalaseRepository.update(id, dataSave);
   }
 
   async getVMEtalaseById(id: number) {
-    return this.etalaseRepository.getById(id);
+    const etalase = await this.etalaseRepository.getById(id);
+    if (!etalase) {
+      throw new NotFoundError(
+        `Vending machine etalase with id ${id} is not found`
+      );
+    }
+    return etalase;
   }
 
   async deleteVMEtalase(id: number) {

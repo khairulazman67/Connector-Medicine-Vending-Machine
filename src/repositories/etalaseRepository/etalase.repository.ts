@@ -9,12 +9,16 @@ export class EtalaseRepository implements IEtalaseRepository {
       data,
     });
   }
+
   async update(
     id: number,
-    data: Partial<Etalase>,
+    data: Prisma.EtalaseUpdateInput,
     tx: TxPrismaClient | PrismaClient = prisma
   ) {
-    return tx.etalase.update({ where: { id }, data });
+    return tx.etalase.update({
+      where: { id } as Prisma.EtalaseWhereUniqueInput,
+      data,
+    });
   }
 
   async getAll(): Promise<Etalase[]> {
@@ -43,8 +47,7 @@ export class EtalaseRepository implements IEtalaseRepository {
         },
       },
     });
-    if (!getDataById)
-      throw new NotFoundError(`Vending machine etalase with id ${id} `);
+
     return getDataById;
   }
 
